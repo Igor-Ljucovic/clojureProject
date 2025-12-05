@@ -1,5 +1,4 @@
 (ns clojure-university-project.core (:gen-class))
-(require '[clojure.string :as str])
 
 (def questions
   ["How interesting do you find working with large amounts of data (1-10)?"
@@ -48,7 +47,7 @@
   )
 )
 
-(defn recommend-it-job-jositions
+(defn recommended-it-job-jositions
   [profile]
   (let  
     [
@@ -72,25 +71,14 @@
       (conj "embedded, IoT, or hardware related"))
     ]
     (if (empty? results)
-      ["Your interests are mixed; explore different fields 
-      (frontend, backend, data, QA) and see what fits you."]
+      [(str "Your interests are mixed; explore different fields "
+      "(frontend, backend, data, QA etc.) and see what fits you.")]
       results
     )
   )
 )
 
-(defn trim-last-vector-element-comma-and-whitespace [vector]
-  (let [last-index (dec (count vector))
-        last-item  (nth vector last-index)
-        trimmed    (clojure.string/replace last-item #"[,\s]+$" "")]
-    (assoc vector last-index trimmed)
-  )
-)
-
-(defn trim-string-end-comma-whitespace [s]
-  (clojure.string/replace s #"[,\s]+$" ""))
-
-(defn it-job-position-suitability-messages
+(defn it-job-suitability-messages
   [average]
   (cond
     (>= average 8)
@@ -109,20 +97,22 @@
   (println "Rate each topic from 1 (hate it) to 10 (love it),
   don't use decimals (like 7.5).\n")
 
-  (let [ratings    (vec (map ask-for-it-topics-ratings questions))
-        profile    (build-profile ratings)
-        total      (reduce + ratings)
-        average    (/ (double total) (count ratings))
-        strengths  (strong-areas profile 7)
-        weaknesses (weak-areas profile 4)
-        path-msg   (recommend-it-job-jositions profile)
-        suit-msg   (it-job-position-suitability-messages average)]
+  (let 
+    [ 
+      ratings (vec (map ask-for-it-topics-ratings questions))
+      profile (build-profile ratings)
+      total (reduce + ratings)
+      average (/ (double total) (count ratings))
+      it-jobs-suitability (it-job-suitability-messages average)
+      strengths (strong-areas profile 7)
+      weaknesses (weak-areas profile 4)
+      recommended-it-jobs-positions (recommended-it-job-jositions profile)
+    ]
 
-    (println "\nYour ratings:" (clojure.string/join ", " ratings))
     (println (format "Average interest: %.2f" average))
-    (println suit-msg)
+    (println it-jobs-suitability)
     (println "Strong areas:" (clojure.string/join ", " strengths))
     (println "Weak areas:" (clojure.string/join ", " weaknesses))
-    (println "Recommended IT job positions:" (clojure.string/join ", " path-msg))
+    (println "Recommended IT job positions:" (clojure.string/join ", " recommended-it-jobs-positions))
   )
 )
