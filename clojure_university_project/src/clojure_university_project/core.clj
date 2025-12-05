@@ -78,6 +78,14 @@
   )
 )
 
+(defn trim-last-vector-element-comma-and-whitespace [vector]
+  (let [last-index (dec (count vector))
+        last-item  (nth vector last-index)
+        trimmed    (clojure.string/replace last-item #"[,\s]+$" "")]
+    (assoc vector last-index trimmed)
+  )
+)
+
 (defn it-job-position-suitability-messages
   [average]
   (cond
@@ -110,6 +118,6 @@
     (println suit-msg)
     (println "Strong areas:" strengths)
     (println "Weak areas:" weaknesses)
-    (println "Recommended IT job positions:" path-msg)
+    (println "Recommended IT job positions:" (trim-last-vector-element-comma-and-whitespace path-msg))
   )
 )
