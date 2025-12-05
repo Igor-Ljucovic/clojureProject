@@ -1,4 +1,5 @@
 (ns clojure-university-project.core (:gen-class))
+(require '[clojure.string :as str])
 
 (def questions
   ["How interesting do you find working with large amounts of data (1-10)?"
@@ -60,20 +61,20 @@
 
       results (cond-> []
       (and (>= data 8) (>= math 6))
-      (conj "data/analytics/ML/AI,")
+      (conj "data/analytics/ML/AI")
       (and (>= engineering 7) (>= math 5))
-      (conj "backend, systems, or DevOps,")
+      (conj "backend, systems, or DevOps")
       (and (>= uiux 7) (>= engineering 4))
-      (conj "frontend development or UI/UX-heavy,")
+      (conj "frontend development or UI/UX-heavy")
       (and (>= testing 8))
-      (conj "QA, testing, or test automation,")
+      (conj "QA, testing, or test automation")
       (and (>= hardware 7) (>= engineering 6) (>= math 6))
-      (conj "embedded, IoT, or hardware related,"))
+      (conj "embedded, IoT, or hardware related"))
     ]
     (if (empty? results)
-    ["Your interests are mixed; explore different fields 
-    (frontend, backend, data, QA) and see what fits you."]
-    results
+      ["Your interests are mixed; explore different fields 
+      (frontend, backend, data, QA) and see what fits you."]
+      results
     )
   )
 )
@@ -85,6 +86,9 @@
     (assoc vector last-index trimmed)
   )
 )
+
+(defn trim-string-end-comma-whitespace [s]
+  (clojure.string/replace s #"[,\s]+$" ""))
 
 (defn it-job-position-suitability-messages
   [average]
@@ -102,7 +106,8 @@
 
 (defn -main
   [& args]
-  (println "Rate each topic from 1 (hate it) to 10 (love it), don't use decimals (like 7.5).\n")
+  (println "Rate each topic from 1 (hate it) to 10 (love it),
+  don't use decimals (like 7.5).\n")
 
   (let [ratings    (vec (map ask-for-it-topics-ratings questions))
         profile    (build-profile ratings)
@@ -113,11 +118,11 @@
         path-msg   (recommend-it-job-jositions profile)
         suit-msg   (it-job-position-suitability-messages average)]
 
-    (println "\nYour ratings:" (vec ratings))
+    (println "\nYour ratings:" (clojure.string/join ", " ratings))
     (println (format "Average interest: %.2f" average))
     (println suit-msg)
-    (println "Strong areas:" strengths)
-    (println "Weak areas:" weaknesses)
-    (println "Recommended IT job positions:" (trim-last-vector-element-comma-and-whitespace path-msg))
+    (println "Strong areas:" (clojure.string/join ", " strengths))
+    (println "Weak areas:" (clojure.string/join ", " weaknesses))
+    (println "Recommended IT job positions:" (clojure.string/join ", " path-msg))
   )
 )
