@@ -57,25 +57,28 @@
       hardware    (get profile "hardware")
       uiux        (get profile "uiux")
       testing     (get profile "testing")
-    ]
-    (cond
+
+      results (cond-> []
       (and (>= data 8) (>= math 6))
-      "You seem suited for data/analytics/ML/AI roles."
+      (conj "data/analytics/ML/AI,")
       (and (>= engineering 7) (>= math 5))
-      "You seem suited for backend, systems, or DevOps work."
+      (conj "backend, systems, or DevOps,")
       (and (>= uiux 7) (>= engineering 4))
-      "You seem suited for frontend development or UI/UX-heavy roles."
+      (conj "frontend development or UI/UX-heavy,")
       (and (>= testing 8))
-      "You seem suited for QA, testing, or test automation roles."
+      (conj "QA, testing, or test automation,")
       (and (>= hardware 7) (>= engineering 6) (>= math 6))
-      "You seem suited for embedded, IoT, or hardware-near software."
-      :else
-      "Your interests are mixed; try different IT areas (frontend, backend, data, QA) and see which one you enjoy working with the most."
+      (conj "embedded, IoT, or hardware related,"))
+    ]
+    (if (empty? results)
+    ["Your interests are mixed; explore different fields 
+    (frontend, backend, data, QA) and see what fits you."]
+    results
     )
   )
 )
 
-(defn it-job-jositions-suitability-messages
+(defn it-job-position-suitability-messages
   [average]
   (cond
     (>= average 8)
@@ -100,13 +103,13 @@
         strengths  (strong-areas profile 7)
         weaknesses (weak-areas profile 4)
         path-msg   (recommend-it-job-jositions profile)
-        suit-msg   (it-job-jositions-suitability-messages average)]
+        suit-msg   (it-job-position-suitability-messages average)]
 
     (println "\nYour ratings:" (vec ratings))
     (println (format "Average interest: %.2f" average))
     (println suit-msg)
     (println "Strong areas:" strengths)
     (println "Weak areas:" weaknesses)
-    (println path-msg)
+    (println "Recommended IT job positions:" path-msg)
   )
 )
