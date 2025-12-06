@@ -6,8 +6,8 @@
 
 3 - add more input parameters other then just asking the users how interesting they find certain topics (mandatory parameters for if they enjoy stale or dynamic working environment, how much social interaction they would prefer at the job, optional parameters for MBTI/BIG5, "collecting candidate features", maybe some non-numeric input parameters too)  
 
-4 - add more options at the beginning so that the user can:
-    a - ask for a prediction of which IT position suits them best (if they are unemployed)
+4 - add more options at the beginning so that the user can:  
+    a - ask for a prediction of which IT position suits them best (if they are unemployed)  
     b - add new data for better predictions (if they are already employed) (this will require a database and connecting to it (probably))  
 
 5 - add non-manual validation (for employed users' data)  
