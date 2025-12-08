@@ -1,19 +1,23 @@
 (ns clojure-university-project.core (:gen-class))
 
 (def questions
-  ["How interesting do you find working with large amounts of data (1-10)?"
-   "How interesting do you find math (1-10)?"
-   "How interesting do you find designing/engineering new things and how they work (1-10)?"
-   "How interesting do you find working with hardware (1-10)?"
-   "How interesting do you find making things look nice and be intuitive to users (1-10)?"
-   "How interesting do you find testing, thinking about edge cases and predicting bugs in code (1-10)?"
+  ["How interesting do you find working with large amounts of data (0-10)?"
+   "How interesting do you find math (0-10)?"
+   "How interesting do you find designing/engineering new things and how they work (0-10)?"
+   "How interesting do you find working with hardware (0-10)?"
+   "How interesting do you find making things look nice and be intuitive to users (0-10)?"
+   "How interesting do you find testing, thinking about edge cases and predicting bugs in code (0-10)?"
   ]
 )
 
 (defn ask-for-it-topics-ratings [question]
   (println question)
   (flush)
-  (Double/parseDouble (read-line))
+  (let [v (Double/parseDouble (read-line))]
+    (when (or (< v 0) (> v 10)) 
+      (throw (ex-info "Value must be between 0 and 10." {:value v}))
+    ) v
+  )
 )
 
 (defn build-profile
@@ -94,8 +98,7 @@
 
 (defn -main
   [& args]
-  (println "Rate each topic from 1 (hate it) to 10 (love it),
-  don't use decimals (like 7.5).\n")
+  (println "Rate each topic from 1 (hate it) to 10 (love it).")
 
   (let 
     [ 
