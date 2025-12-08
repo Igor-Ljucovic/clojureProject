@@ -13,7 +13,7 @@
 (defn ask-for-it-topics-ratings [question]
   (println question)
   (flush)
-  (Integer/parseInt (read-line))
+  (Double/parseDouble (read-line))
 )
 
 (defn build-profile
