@@ -66,26 +66,19 @@
   }
 )
 
-
 (defn strong-areas
   [profile threshold]
-  (->> 
-    profile
-      (filter (fn [[_ score]] (>= score threshold)))
-      (map first)
-      (sort)
-      (vec)
+  (let [filtered (filter (fn [[_ score]] (>= score threshold)) profile)
+    names (map (fn [[k _]] (name k)) filtered)]
+    (vec (sort names))
   )
 )
 
 (defn weak-areas
   [profile threshold]
-  (->> 
-    profile
-      (filter (fn [[_ score]] (<= score threshold)))
-      (map first)
-      (sort)
-      (vec)
+  (let [filtered (filter (fn [[_ score]] (<= score threshold)) profile)
+    names (map (fn [[k _]] (name k)) filtered)]
+    (vec (sort names))
   )
 )
 
@@ -150,7 +143,7 @@
 (defn -main
   [& args]
   (println "Rate each topic from 1 (hate it) to 10 (love it).")
-
+  
   (let 
     [ 
       ratings (vec (map ask-for-it-topics-ratings questions))
