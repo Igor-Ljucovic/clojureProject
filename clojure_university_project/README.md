@@ -1,8 +1,8 @@
 ## Ideas for future development of the app:
 
-1 - add more output parameters (game dev, it support, mobile dev etc.)  
+1 (done) - add more output parameters (game dev, it support, mobile dev etc.)  
 
-2 - add validation  
+2 (partially done) - add validation  
 
 3 - add more input parameters other then just asking the users how interesting they find certain topics (mandatory parameters for if they enjoy stale or dynamic working environment, how much social interaction they would prefer at the job, optional parameters for MBTI/BIG5, "collecting candidate features", maybe some non-numeric input parameters too)  
 
