@@ -69,21 +69,23 @@
 
 (defn strong-areas
   [profile threshold]
-  (->> profile
-       (filter (fn [[_ score]] (>= score threshold)))
-       (map first)
-       (sort)
-       (vec)
+  (->> 
+    profile
+      (filter (fn [[_ score]] (>= score threshold)))
+      (map first)
+      (sort)
+      (vec)
   )
 )
 
 (defn weak-areas
   [profile threshold]
-  (->> profile
-       (filter (fn [[_ score]] (<= score threshold)))
-       (map first)
-       (sort)
-       (vec)
+  (->> 
+    profile
+      (filter (fn [[_ score]] (<= score threshold)))
+      (map first)
+      (sort)
+      (vec)
   )
 )
 
@@ -93,20 +95,32 @@
   (let 
     [results 
       (cond-> []
-        (and (>= data 8) (>= math 6))
-        (conj "data/analytics/ML/AI")
+          (and (>= data 8) (>= statistics 7) (>= math 6))
+          (conj "data analyst, data science, ML/AI, AI")
 
-        (and (>= engineering 7) (>= math 5))
-        (conj "backend, systems, or DevOps")
+          (and (>= engineering 7) (>= algorithms 7) (>= optimization 7))
+          (conj "backend development, systems engineering")
 
-        (and (>= ui 7) (>= engineering 4))
-        (conj "frontend development or UI/UX-heavy")
+          (and (>= engineering 6) (>= debugging 7) (>= monotony 6))
+          (conj "DevOps")
 
-        (>= testing 8)
-        (conj "QA, testing, or test automation")
+          (and (>= hardware 7) (>= engineering 6) (>= physics 6))
+          (conj "embedded systems, IoT, firmware, robotics, hardware-related")
 
-        (and (>= hardware 7) (>= engineering 6) (>= math 6))
-        (conj "embedded, IoT, or hardware related")
+          (and (>= geometry 7) (>= algorithms 7) (>= optimization 7) (>= math 7))
+          (conj "game development, simulations, graphics")
+
+          (and (>= ui 7) (>= people 6) (>= simplification 7))
+          (conj "frontend development, mobile development")
+
+          (and (>= ux 7) (>= empathy 7) (>= people 6))
+          (conj "UX/UI design, product design")
+
+          (and (>= testing 8) (>= edge-cases 8) (>= debugging 7) (>= monotony 6))
+          (conj "QA engineering, test automation")
+
+          (and (>= edge-cases 8) (>= debugging 8))
+          (conj "security")
       )
     ]
     (if (empty? results)
@@ -127,7 +141,7 @@
     (>= average 6)
     "You probably should work in the IT sector."
     (>= average 4)
-    "IT might be okay for you, but consider it as one of several options."
+    "The IT field might be okay for you, but consider it as one of several options."
     :else
     "You probably shouldn't work in the IT sector."
   )
