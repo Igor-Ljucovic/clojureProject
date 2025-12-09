@@ -1,12 +1,31 @@
 (ns clojure-university-project.core (:gen-class))
 
 (def questions
-  ["How interesting do you find working with large amounts of data (0-10)?"
-   "How interesting do you find math (0-10)?"
-   "How interesting do you find designing/engineering new things and how they work (0-10)?"
-   "How interesting do you find working with hardware (0-10)?"
-   "How interesting do you find making things look nice and be intuitive to users (0-10)?"
-   "How interesting do you find testing, thinking about edge cases and predicting bugs in code (0-10)?"
+  ["How interesting do you find working with large amounts of data and trying to find useful conclusions in it? (0-10)"
+   "How good are you at advanced math (integrals, derivatives, functions with multiple variables)? (0-10)"
+   "How interesting do you find data structures and solving algorithmic problems? (0-10)"
+   "How good are you at mechanical and electrical physics? (0-10)"
+   "How interesting does working with 2D and 3D geometry in programming sound to you (0-10)?"
+   "How fun does abstracting to more general rules sound to you? (0-10)"
+   "How interesting does optimizing memory and making things run as fast and efficiently as possible sound to you? (0-10)"
+   "How interesting do you find designing/engineering new things and how they work? (0-10)"
+   "How interesting do you find working with hardware? (0-10)"
+   "How fun does making things look nice and be simple and intuitive sound? (0-10)"
+   "How good are you at identifying weak spots in things or people? (0-10)"
+   "How good are you at finding the only wrong way to do something? (0-10)"
+   "How interesting does testing, thinking about edge cases and predicting bugs in code sound? (0-10)"
+   "How interesting do you find working with people, understanding their problems and solving them? (0-10)"
+   "How much do you care about how technology feels in everyday life and how people interact with it moment-to-moment? (0-10)"
+   "How exciting is the idea of building something interactive that reacts differently based on the user's actions? (0-10)"
+   "How fun is it for you to imagine how something could go wrong, and how you'd prevent it? (0-10)"
+   "How much does it interest you to make things that can grow from small to huge without breaking? (0-10)"
+   "How interesting does statistics and probability sound to you? (0-10)"
+   "How naturally does it come to you to predict what someone will find confusing or difficult before they even try it? (0-10)"
+   "How satisfying is it for you to take messy information and structure it in a clean, efficient way? (0-10)"
+   "How patient are you when someone doesn't understand something, and you need to explain it calmly? (0-10)"
+   "How willing are you to spend a long time figuring out why something doesn't work, even if the reason is tiny or obscure? (0-10)"
+   "Would you mind solving the same problems the majority of the time at work? (0-10)"
+   "How much do you care about how much money you'll make? (0-10)"
   ]
 )
 
@@ -21,15 +40,32 @@
 )
 
 (defn build-profile
-  [ratings]
-  {"data"        (nth ratings 0) 
-   "math"        (nth ratings 1)
-   "engineering" (nth ratings 2)
-   "hardware"    (nth ratings 3)
-   "uiux"        (nth ratings 4)
-   "testing"     (nth ratings 5)
+  [[data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing people ux statistics
+    empathy simplification patience debugging monotony money]]
+  {:data              data
+   :math              math
+   :algorithms        algorithms
+   :physics           physics
+   :geometry          geometry
+   :abstraction       abstraction
+   :optimization      optimization
+   :engineering       engineering
+   :hardware          hardware
+   :ui                ui
+   :edge-cases        edge-cases
+   :testing           testing
+   :people            people
+   :ux                ux
+   :statistics        statistics
+   :empathy           empathy
+   :simplification    simplification
+   :patience          patience
+   :debugging         debugging
+   :monotony          monotony
+   :money             money
   }
 )
+
 
 (defn strong-areas
   [profile threshold]
@@ -52,31 +88,32 @@
 )
 
 (defn recommended-it-job-jositions
-  [profile]
-  (let  
-    [
-      data        (get profile "data")
-      math        (get profile "math")
-      engineering (get profile "engineering")
-      hardware    (get profile "hardware")
-      uiux        (get profile "uiux")
-      testing     (get profile "testing")
+  [{:keys [data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing people ux statistics
+    empathy simplification patience debugging monotony money]}]
+  (let 
+    [results 
+      (cond-> []
+        (and (>= data 8) (>= math 6))
+        (conj "data/analytics/ML/AI")
 
-      results (cond-> []
-      (and (>= data 8) (>= math 6))
-      (conj "data/analytics/ML/AI")
-      (and (>= engineering 7) (>= math 5))
-      (conj "backend, systems, or DevOps")
-      (and (>= uiux 7) (>= engineering 4))
-      (conj "frontend development or UI/UX-heavy")
-      (and (>= testing 8))
-      (conj "QA, testing, or test automation")
-      (and (>= hardware 7) (>= engineering 6) (>= math 6))
-      (conj "embedded, IoT, or hardware related"))
+        (and (>= engineering 7) (>= math 5))
+        (conj "backend, systems, or DevOps")
+
+        (and (>= ui 7) (>= engineering 4))
+        (conj "frontend development or UI/UX-heavy")
+
+        (>= testing 8)
+        (conj "QA, testing, or test automation")
+
+        (and (>= hardware 7) (>= engineering 6) (>= math 6))
+        (conj "embedded, IoT, or hardware related")
+      )
     ]
     (if (empty? results)
-      [(str "Your interests are mixed; explore different fields "
-      "(frontend, backend, data, QA etc.) and see what fits you.")]
+      [
+        (str "Your interests are mixed; explore different fields "
+        "(frontend, backend, data, QA etc.) and see what fits you.")
+      ]
       results
     )
   )
