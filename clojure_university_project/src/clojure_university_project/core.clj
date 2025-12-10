@@ -29,13 +29,29 @@
   ]
 )
 
+;had to seperate parsing to avoid "Cannot recur across try" error"
+(defn parse-double [s]
+  (try
+    (Double/parseDouble s)
+    (catch NumberFormatException _ nil)
+  )
+)
+
 (defn ask-for-it-topics-ratings [question]
-  (println question)
-  (flush)
-  (let [v (Double/parseDouble (read-line))]
-    (when (or (< v 0) (> v 10)) 
-      (throw (ex-info "Value must be between 0 and 10." {:value v}))
-    ) v
+  (loop []
+    (println question)
+    (flush)
+    (let 
+      [input (read-line)
+      value (parse-double input)]
+      (if (and value (<= 0 value 10))
+        value
+        (do
+          (println "Please enter a number from 0 to 10 (decimals allowed).")
+          (recur)
+        )
+      )
+    )
   )
 )
 
