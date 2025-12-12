@@ -156,10 +156,8 @@
   )
 )
 
-(defn -main
-  [& args]
+(defn run-app []
   (println "Rate each topic from 1 (hate it) to 10 (love it).")
-  
   (let 
     [ 
       ratings (vec (map ask-for-it-topics-ratings questions))
@@ -178,4 +176,9 @@
     (println "Weak areas:" (clojure.string/join ", " weaknesses))
     (println "Recommended IT job positions:" (clojure.string/join ", " recommended-it-jobs-positions))
   )
+)
+
+(defn -main
+  [& args]
+  (run-app)
 )
