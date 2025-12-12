@@ -142,8 +142,7 @@
   )
 )
 
-(defn it-job-suitability-messages
-  [average]
+(defn it-job-suitability-messages [average]
   (cond
     (>= average 8)
     "You are very likely to enjoy working in IT."
@@ -153,6 +152,17 @@
     "The IT field might be okay for you, but consider it as one of several options."
     :else
     "You probably shouldn't work in the IT sector."
+  )
+)
+
+; used for testing purposes, as a stub for "ask-for-it-topics-ratings questions" for ratings
+(defn random-vector
+  [n min-val max-val]
+  (vec
+    (repeatedly n
+      #(let [r (+ min-val (* (rand) (- max-val min-val)))] 
+       (/ (Math/round (* 100 r)) 100.0))
+    )
   )
 )
 
@@ -180,5 +190,6 @@
 
 (defn -main
   [& args]
+  ;(println (random-vector 25 6.3 9))
   (run-app)
 )
