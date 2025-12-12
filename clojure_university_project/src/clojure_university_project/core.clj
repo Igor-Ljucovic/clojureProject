@@ -105,7 +105,7 @@
     [results 
       (cond-> []
           (and (>= data 8) (>= statistics 7) (>= math 6))
-          (conj "data analyst, data science, ML/AI, AI")
+          (conj "data analyst, data science, ML, AI")
 
           (and (>= engineering 7) (>= algorithms 7) (>= optimization 7))
           (conj "backend development, systems engineering")
@@ -155,7 +155,7 @@
   )
 )
 
-; used for testing purposes, as a stub for "ask-for-it-topics-ratings questions" for ratings
+; used for testing purposes, as a stub for "ask-for-it-topics-ratings" questions for ratings
 (defn random-vector
   [n min-val max-val]
   (vec
@@ -167,7 +167,7 @@
 )
 
 (defn run-app []
-  (println "Rate each topic from 1 (hate it) to 10 (love it).")
+  (println "Rate each topic from 0 (hate it) to 10 (love it).")
   (let 
     [ 
       ratings (vec (map ask-for-it-topics-ratings questions))
