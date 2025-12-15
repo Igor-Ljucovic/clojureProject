@@ -190,6 +190,5 @@
 
 (defn -main
   [& args]
-  ;(println (random-vector 25 6.3 9))
   (run-app)
 )
