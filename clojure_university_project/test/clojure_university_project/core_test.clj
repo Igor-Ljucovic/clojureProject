@@ -1,7 +1,12 @@
 (ns clojure-university-project.core-test
-  (:require [clojure.test :refer :all]
-            [clojure-university-project.core :refer :all]))
+  (:require [midje.sweet :refer :all]
+            [clojure-university-project.core :as sut]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(facts
+  (+ 1 2) => 3)
+
+(facts
+  (+ 1 2) => 7)
+
+(facts
+  (+ 1 "3") => 7)
