@@ -1,4 +1,5 @@
 (ns clojure-university-project.core (:gen-class))
+(require '[criterium.core :as c])
 
 (def questions
   ["How interesting do you find working with large amounts of data and trying to find useful conclusions in it? (0-10)"
@@ -190,5 +191,7 @@
 
 (defn -main
   [& args]
-  (run-app)
+  ;(run-app)
+  ;(println 5)
+  ;(c/quick-bench (reduce + (range 100000)))
 )
