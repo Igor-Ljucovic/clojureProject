@@ -1,5 +1,7 @@
-(ns clojure-university-project.core (:gen-class))
-(require '[criterium.core :as c])
+(ns clojure-university-project.core
+  (:require [criterium.core :as c]
+            [clojure.string :as str])
+  (:gen-class))
 
 (def questions
   ["How interesting do you find working with large amounts of data and trying to find useful conclusions in it? (0-10)"
@@ -26,39 +28,32 @@
    "How patient are you when someone doesn't understand something, and you need to explain it calmly? (0-10)"
    "How willing are you to spend a long time figuring out why something doesn't work, even if the reason is tiny or obscure? (0-10)"
    "Would you mind solving the same problems the majority of the time at work? (0-10)"
-   "How much do you care about how much money you'll make? (0-10)"
-  ]
-)
+   "How much do you care about how much money you'll make? (0-10)"])
 
-;had to seperate parsing to avoid "Cannot recur across try" error"
-(defn parse-double [s]
+;; had to separate parsing to avoid "Cannot recur across try" error
+(defn- parse-rating-double
+  [s]
   (try
     (Double/parseDouble s)
-    (catch NumberFormatException _ nil)
-  )
-)
+    (catch NumberFormatException _ nil)))
 
-(defn ask-for-it-topics-ratings [question]
+(defn ask-for-it-topics-ratings
+  [question]
   (loop []
     (println question)
     (flush)
-    (let 
-      [input (read-line)
-      value (parse-double input)]
+    (let [input (read-line)
+          value (parse-rating-double input)]
       (if (and value (<= 0 value 10))
         value
         (do
           (println "Please enter a number from 0 to 10 (decimals allowed).")
-          (recur)
-        )
-      )
-    )
-  )
-)
+          (recur))))))
 
+;; HACK: code duplication
 (defn build-profile
-  [[data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing people ux statistics
-    empathy simplification patience debugging monotony money]]
+  [[data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing
+    people ux statistics empathy simplification patience debugging monotony money]]
   {:data              data
    :math              math
    :algorithms        algorithms
@@ -79,119 +74,92 @@
    :patience          patience
    :debugging         debugging
    :monotony          monotony
-   :money             money
-  }
-)
+   :money             money})
 
+;; HACK: code duplication
 (defn strong-areas
   [profile threshold]
   (let [filtered (filter (fn [[_ score]] (>= score threshold)) profile)
-    names (map (fn [[k _]] (name k)) filtered)]
-    (vec (sort names))
-  )
-)
+        names    (map (fn [[k _]] (name k)) filtered)]
+    (vec (sort names))))
 
+;; HACK: code duplication
 (defn weak-areas
   [profile threshold]
   (let [filtered (filter (fn [[_ score]] (<= score threshold)) profile)
-    names (map (fn [[k _]] (name k)) filtered)]
-    (vec (sort names))
-  )
-)
+        names    (map (fn [[k _]] (name k)) filtered)]
+    (vec (sort names))))
 
-(defn recommended-it-job-jositions
-  [{:keys [data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing people ux statistics
-    empathy simplification patience debugging monotony money]}]
+;; HACK: code duplication
+(defn recommended-it-job-positions
+  [{:keys [data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing
+           people ux statistics empathy simplification patience debugging monotony money]}]
   (let 
-    [results 
-      (cond-> []
-          (and (>= data 8) (>= statistics 7) (>= math 6))
-          (conj "data analyst, data science, ML, AI")
+    [results (cond-> []
+               (and (>= data 8) (>= statistics 7) (>= math 6))
+               (conj "data analyst, data science, ML, AI")
+ 
+               (and (>= engineering 7) (>= algorithms 7) (>= optimization 7))
+               (conj "backend development, systems engineering")
 
-          (and (>= engineering 7) (>= algorithms 7) (>= optimization 7))
-          (conj "backend development, systems engineering")
+               (and (>= engineering 6) (>= debugging 7) (>= monotony 6))
+               (conj "DevOps")
 
-          (and (>= engineering 6) (>= debugging 7) (>= monotony 6))
-          (conj "DevOps")
+               (and (>= hardware 7) (>= engineering 6) (>= physics 6))
+               (conj "embedded systems, IoT, firmware, robotics, hardware-related")
 
-          (and (>= hardware 7) (>= engineering 6) (>= physics 6))
-          (conj "embedded systems, IoT, firmware, robotics, hardware-related")
+               (and (>= geometry 7) (>= algorithms 7) (>= optimization 7) (>= math 7))
+               (conj "game development, simulations, graphics")
 
-          (and (>= geometry 7) (>= algorithms 7) (>= optimization 7) (>= math 7))
-          (conj "game development, simulations, graphics")
+               (and (>= ui 7) (>= people 6) (>= simplification 7))
+               (conj "frontend development, mobile development")
 
-          (and (>= ui 7) (>= people 6) (>= simplification 7))
-          (conj "frontend development, mobile development")
+               (and (>= ux 7) (>= empathy 7) (>= people 6))
+               (conj "UX/UI design, product design")
 
-          (and (>= ux 7) (>= empathy 7) (>= people 6))
-          (conj "UX/UI design, product design")
+               (and (>= testing 8) (>= edge-cases 8) (>= debugging 7) (>= monotony 6))
+               (conj "QA engineering, test automation")
 
-          (and (>= testing 8) (>= edge-cases 8) (>= debugging 7) (>= monotony 6))
-          (conj "QA engineering, test automation")
-
-          (and (>= edge-cases 8) (>= debugging 8))
-          (conj "security")
-      )
-    ]
+               (and (>= edge-cases 8) (>= debugging 8))
+               (conj "security"))]
     (if (empty? results)
-      [
-        (str "Your interests are mixed; explore different fields "
-        "(frontend, backend, data, QA etc.) and see what fits you.")
-      ]
-      results
-    )
-  )
-)
+      [(str "Your interests are mixed; explore different fields " 
+            "(frontend, backend, data, QA etc.) and see what fits you.")]
+      results)))
 
 (defn it-job-suitability-messages [average]
   (cond
-    (>= average 8)
-    "You are very likely to enjoy working in IT."
-    (>= average 6)
-    "You probably should work in the IT sector."
-    (>= average 4)
-    "The IT field might be okay for you, but consider it as one of several options."
-    :else
-    "You probably shouldn't work in the IT sector."
-  )
-)
+    (>= average 8) "You are very likely to enjoy working in IT."
+    (>= average 6) "You probably should work in the IT sector."
+    (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
+    :else          "You probably shouldn't work in the IT sector."))
 
 ; used for testing purposes, as a stub for "ask-for-it-topics-ratings" questions for ratings
-(defn random-vector
+(defn random-ratings
   [n min-val max-val]
   (vec
     (repeatedly n
       #(let [r (+ min-val (* (rand) (- max-val min-val)))] 
-       (/ (Math/round (* 100 r)) 100.0))
-    )
-  )
-)
+       (/ (Math/round (* 100 r)) 100.0)))))
 
-(defn run-app []
+;; HACK: single responsibility principle violation
+(defn run-app 
+  []
   (println "Rate each topic from 0 (hate it) to 10 (love it).")
-  (let 
-    [ 
-      ratings (vec (map ask-for-it-topics-ratings questions))
-      profile (build-profile ratings)
-      total (reduce + ratings)
-      average (/ (double total) (count ratings))
-      it-jobs-suitability (it-job-suitability-messages average)
-      strengths (strong-areas profile 7)
-      weaknesses (weak-areas profile 4)
-      recommended-it-jobs-positions (recommended-it-job-jositions profile)
-    ]
-
+  (let [ratings (mapv ask-for-it-topics-ratings questions)
+        profile (build-profile ratings)
+        total (reduce + ratings)
+        average (/ (double total) (count ratings))
+        it-job-suitability (it-job-suitability-messages average)
+        strengths (strong-areas profile 7)
+        weaknesses (weak-areas profile 4)
+        recommended-it-job-positions (recommended-it-job-positions profile)]
     (println (format "Average interest: %.2f" average))
-    (println it-jobs-suitability)
-    (println "Strong areas:" (clojure.string/join ", " strengths))
-    (println "Weak areas:" (clojure.string/join ", " weaknesses))
-    (println "Recommended IT job positions:" (clojure.string/join ", " recommended-it-jobs-positions))
-  )
-)
+    (println it-job-suitability)
+    (println "Strong areas:" (str/join ", " strengths))
+    (println "Weak areas:" (str/join ", " weaknesses))
+    (println "Recommended IT job positions:" (str/join ", " recommended-it-job-positions))))
 
 (defn -main
   [& args]
-  ;(run-app)
-  ;(println 5)
-  ;(c/quick-bench (reduce + (range 100000)))
-)
+  (run-app))
