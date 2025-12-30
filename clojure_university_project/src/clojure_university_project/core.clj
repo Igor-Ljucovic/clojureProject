@@ -118,23 +118,23 @@
         results
         (-> []
             (conj (str (+ (* data 16) (* statistics 14) (* math 12))
-                       "|data analyst, data science, ML, AI"))
+                       "|Data analyst, data science, ML, AI"))
             (conj (str (+ (* engineering 16) (* algorithms 14) (* optimization 12))
-                       "|backend development, systems engineering"))
+                       "|Backend development, systems engineering"))
             (conj (str (+ (* engineering 14) (* debugging 16) (* monotony 12))
                        "|DevOps"))
             (conj (str (+ (* hardware 16) (* engineering 12) (* physics 12))
-                       "|embedded systems, IoT, firmware, robotics, hardware-related"))
+                       "|Embedded systems, IoT, firmware, robotics, hardware-related"))
             (conj (str (+ (* geometry 14) (* algorithms 14) (* optimization 14) (* math 12))
-                       "|game development, simulations, graphics"))
+                       "|Game development, simulations, graphics"))
             (conj (str (+ (* ui 16) (* simplification 14) (* people 10))
-                       "|frontend development, mobile development"))
+                       "|Frontend development, mobile development"))
             (conj (str (+ (* ux 16) (* empathy 16) (* people 10))
                        "|UX/UI design, product design"))
             (conj (str (+ (* testing 16) (* edge-cases 16) (* debugging 14) (* monotony 10))
                        "|QA engineering, test automation"))
             (conj (str (+ (* edge-cases 16) (* debugging 16))
-                       "|security")))]
+                       "|Cyber security")))]
     results))
 
 
@@ -153,6 +153,20 @@
       #(let [r (+ min-val (* (rand) (- max-val min-val)))] 
        (/ (Math/round (* 100 r)) 100.0)))))
 
+(defn format-recommended-jobs
+  "Takes [\"score|label\" ...] and returns formatted strings,
+   sorted from highest to lowest score."
+  [jobs]
+  (->> jobs
+       (map (fn [s]
+              (let [[score label] (clojure.string/split s #"\|" 2)]
+                {:score (Double/parseDouble score)
+                 :label label})))
+       (sort-by :score >)
+       (map (fn [{:keys [score label]}]
+              (format "%.1f%% %s" score label)))))
+
+
 ;; HACK: single responsibility principle violation
 (defn run-app 
   []
@@ -169,7 +183,9 @@
     (println it-job-suitability)
     (println "Strong areas:" (str/join ", " strengths))
     (println "Weak areas:" (str/join ", " weaknesses))
-    (println "Recommended IT job positions:" (str/join ", " recommended-it-job-positions))))
+    (println "Recommended IT job positions:")
+    (doseq [line (format-recommended-jobs recommended-it-job-positions)]
+    (println line))))
 
 (defn -main
   [& args]
