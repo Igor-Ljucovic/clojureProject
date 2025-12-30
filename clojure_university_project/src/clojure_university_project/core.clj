@@ -92,40 +92,51 @@
 
 ;; HACK: code duplication
 (defn recommended-it-job-positions
-  [{:keys [data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing
-           people ux statistics empathy simplification patience debugging monotony money]}]
-  (let 
-    [results (cond-> []
-               (and (>= data 8) (>= statistics 7) (>= math 6))
-               (conj "data analyst, data science, ML, AI")
- 
-               (and (>= engineering 7) (>= algorithms 7) (>= optimization 7))
-               (conj "backend development, systems engineering")
+  [m]
+  (let [data           (:data m)
+        math           (:math m)
+        algorithms     (:algorithms m)
+        physics        (:physics m)
+        geometry       (:geometry m)
+        abstraction    (:abstraction m)
+        optimization   (:optimization m)
+        engineering    (:engineering m)
+        hardware       (:hardware m)
+        ui             (:ui m)
+        edge-cases     (:edge-cases m)
+        testing        (:testing m)
+        people         (:people m)
+        ux             (:ux m)
+        statistics     (:statistics m)
+        empathy        (:empathy m)
+        simplification (:simplification m)
+        patience       (:patience m)
+        debugging      (:debugging m)
+        monotony       (:monotony m)
+        money          (:money m)
 
-               (and (>= engineering 6) (>= debugging 7) (>= monotony 6))
-               (conj "DevOps")
+        results
+        (-> []
+            (conj (str (+ (* data 16) (* statistics 14) (* math 12))
+                       "|data analyst, data science, ML, AI"))
+            (conj (str (+ (* engineering 16) (* algorithms 14) (* optimization 12))
+                       "|backend development, systems engineering"))
+            (conj (str (+ (* engineering 14) (* debugging 16) (* monotony 12))
+                       "|DevOps"))
+            (conj (str (+ (* hardware 16) (* engineering 12) (* physics 12))
+                       "|embedded systems, IoT, firmware, robotics, hardware-related"))
+            (conj (str (+ (* geometry 14) (* algorithms 14) (* optimization 14) (* math 12))
+                       "|game development, simulations, graphics"))
+            (conj (str (+ (* ui 16) (* simplification 14) (* people 10))
+                       "|frontend development, mobile development"))
+            (conj (str (+ (* ux 16) (* empathy 16) (* people 10))
+                       "|UX/UI design, product design"))
+            (conj (str (+ (* testing 16) (* edge-cases 16) (* debugging 14) (* monotony 10))
+                       "|QA engineering, test automation"))
+            (conj (str (+ (* edge-cases 16) (* debugging 16))
+                       "|security")))]
+    results))
 
-               (and (>= hardware 7) (>= engineering 6) (>= physics 6))
-               (conj "embedded systems, IoT, firmware, robotics, hardware-related")
-
-               (and (>= geometry 7) (>= algorithms 7) (>= optimization 7) (>= math 7))
-               (conj "game development, simulations, graphics")
-
-               (and (>= ui 7) (>= people 6) (>= simplification 7))
-               (conj "frontend development, mobile development")
-
-               (and (>= ux 7) (>= empathy 7) (>= people 6))
-               (conj "UX/UI design, product design")
-
-               (and (>= testing 8) (>= edge-cases 8) (>= debugging 7) (>= monotony 6))
-               (conj "QA engineering, test automation")
-
-               (and (>= edge-cases 8) (>= debugging 8))
-               (conj "security"))]
-    (if (empty? results)
-      [(str "Your interests are mixed; explore different fields " 
-            "(frontend, backend, data, QA etc.) and see what fits you.")]
-      results)))
 
 (defn it-job-suitability-messages [average]
   (cond
