@@ -3,7 +3,7 @@
             [clojure.string :as str])
   (:gen-class))
 
-(def questions
+(def ^:private questions
   ["How interesting do you find working with large amounts of data and trying to find useful conclusions in it? (0-10)"
    "How good are you at advanced math (integrals, derivatives, functions with multiple variables)? (0-10)"
    "How interesting do you find data structures and solving algorithmic problems? (0-10)"
@@ -29,6 +29,10 @@
    "How willing are you to spend a long time figuring out why something doesn't work, even if the reason is tiny or obscure? (0-10)"
    "Would you mind solving the same problems the majority of the time at work? (0-10)"
    "How much do you care about how much money you'll make? (0-10)"])
+
+(def ^:private score-label-separator "|")
+(def ^:private score-label-separator-regex
+  (re-pattern (java.util.regex.Pattern/quote score-label-separator)))
 
 ;; had to separate parsing to avoid "Cannot recur across try" error
 (defn- parse-rating-double
@@ -90,6 +94,34 @@
         names    (map (fn [[k _]] (name k)) filtered)]
     (vec (sort names))))
 
+(defn score-with-balanced-weights 
+  "Calculates a weighted score using balanced (not yet normalized) weights.
+
+  The absolute values of weights don't matter, only their proportions.
+  For example, weights {:data 8 :math 6} and {:data 80 :math 60} return the same result.
+  The number of weights also doesn't matter (3, 4, 10, etc.).
+
+  ratings:
+    Map of raw scores, e.g. {:data 8 :math 9}
+
+  weights:
+    Map of weights per key, e.g. {:data 16 :math 12}
+
+  label:
+    String label describing the score,
+    e.g. \"Backend development, systems engineering\"
+
+  Returns:
+    A string in the form \"<score>score-label-separator<label>\"
+
+  Note:
+    Normalization (to percentages so that they total to 100%) is done in a later step."
+  [ratings weights label]
+  (let [num (reduce-kv (fn [acc key value] (+ acc (* value (get ratings key)))) 0 weights)
+        den (reduce + (vals weights))]
+    (str (double (/ num den)) score-label-separator label)))
+
+
 ;; HACK: code duplication
 (defn recommended-it-job-positions
   [m]
@@ -113,32 +145,38 @@
         patience       (:patience m)
         debugging      (:debugging m)
         monotony       (:monotony m)
-        money          (:money m)
+        money          (:money m)]
+    (-> []
+        (conj (score-with-balanced-weights m
+               {:data (* data 160) :statistics (* statistics 140) :math (* math 120)}
+               "Data analytics, data science, ML, AI"))
+        (conj (score-with-balanced-weights m
+               {:engineering (* engineering 16) :algorithms (* algorithms 14) :optimization (* optimization 12)}
+               "Backend development, systems engineering"))
+        (conj (score-with-balanced-weights m
+               {:engineering (* engineering 14) :debugging (* debugging 16) :monotony (* monotony 12)}
+               "DevOps"))
+        (conj (score-with-balanced-weights m
+               {:hardware (* hardware 16) :engineering (* engineering 12) :physics (* physics 12)}
+               "Embedded systems, IoT, firmware, robotics, hardware-related"))
+        (conj (score-with-balanced-weights m
+               {:geometry (* geometry 14) :algorithms (* algorithms 14) :optimization (* optimization 14) :math (* math 12)}
+               "Game development, simulations, graphics"))
+        (conj (score-with-balanced-weights m
+               {:ui (* ui 16) :simplification (* simplification 14) :people (* people 10)}
+               "Frontend development, mobile development"))
+        (conj (score-with-balanced-weights m
+               {:ux (* ux 16) :empathy (* empathy 16) :people (* people 10)}
+               "UX/UI design, product design"))
+        (conj (score-with-balanced-weights m
+               {:testing (* testing 16) :edge-cases (* edge-cases 16) :debugging (* debugging 14) :monotony (* monotony 10)}
+               "QA engineering, test automation"))
+        (conj (score-with-balanced-weights m
+               {:edge-cases (* edge-cases 16) :debugging (* debugging 16)}
+               "Cyber security")))))
 
-        results
-        (-> []
-            (conj (str (+ (* data 16) (* statistics 14) (* math 12))
-                       "|Data analyst, data science, ML, AI"))
-            (conj (str (+ (* engineering 16) (* algorithms 14) (* optimization 12))
-                       "|Backend development, systems engineering"))
-            (conj (str (+ (* engineering 14) (* debugging 16) (* monotony 12))
-                       "|DevOps"))
-            (conj (str (+ (* hardware 16) (* engineering 12) (* physics 12))
-                       "|Embedded systems, IoT, firmware, robotics, hardware-related"))
-            (conj (str (+ (* geometry 14) (* algorithms 14) (* optimization 14) (* math 12))
-                       "|Game development, simulations, graphics"))
-            (conj (str (+ (* ui 16) (* simplification 14) (* people 10))
-                       "|Frontend development, mobile development"))
-            (conj (str (+ (* ux 16) (* empathy 16) (* people 10))
-                       "|UX/UI design, product design"))
-            (conj (str (+ (* testing 16) (* edge-cases 16) (* debugging 14) (* monotony 10))
-                       "|QA engineering, test automation"))
-            (conj (str (+ (* edge-cases 16) (* debugging 16))
-                       "|Cyber security")))]
-    results))
-
-
-(defn it-job-suitability-messages [average]
+(defn it-job-suitability-messages 
+  [average]
   (cond
     (>= average 8) "You are very likely to enjoy working in IT."
     (>= average 6) "You probably should work in the IT sector."
@@ -150,22 +188,21 @@
   [n min-val max-val]
   (vec
     (repeatedly n
-      #(let [r (+ min-val (* (rand) (- max-val min-val)))] 
-       (/ (Math/round (* 100 r)) 100.0)))))
+      #(let [rand-num (+ min-val (* (rand) (- max-val min-val)))] 
+       (/ (Math/round (* 100 rand-num)) 100.0)))))
 
-(defn format-recommended-jobs
-  "Takes [\"score|label\" ...] and returns formatted strings,
-   sorted from highest to lowest score."
-  [jobs]
-  (->> jobs
-       (map (fn [s]
-              (let [[score label] (clojure.string/split s #"\|" 2)]
-                {:score (Double/parseDouble score)
-                 :label label})))
-       (sort-by :score >)
-       (map (fn [{:keys [score label]}]
-              (format "%.1f%% %s" score label)))))
+(defn normalize-jobs 
+  [jobs power]
+  (let [data  (map #(let [[score label] (clojure.string/split % score-label-separator-regex)] 
+                       [(Math/pow (Double/parseDouble score) power) label]) jobs)
+        total (apply + (map first data))]
+    (sort-by first > 
+      (map (fn [[score label]] [(* 100 (/ score total)) label]) data))))
 
+(defn format-jobs 
+  [normalized-data]
+  (map (fn [[score label]] (format "%.1f%% %s" score label)) 
+       normalized-data))
 
 ;; HACK: single responsibility principle violation
 (defn run-app 
@@ -184,7 +221,8 @@
     (println "Strong areas:" (str/join ", " strengths))
     (println "Weak areas:" (str/join ", " weaknesses))
     (println "Recommended IT job positions:")
-    (doseq [line (format-recommended-jobs recommended-it-job-positions)]
+    (doseq [line (-> (normalize-jobs recommended-it-job-positions 4)
+                     (format-jobs))]
     (println line))))
 
 (defn -main
