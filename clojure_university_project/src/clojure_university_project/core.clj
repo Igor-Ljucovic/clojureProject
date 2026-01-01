@@ -191,13 +191,21 @@
       #(let [rand-num (+ min-val (* (rand) (- max-val min-val)))] 
        (/ (Math/round (* 100 rand-num)) 100.0)))))
 
-(defn normalize-jobs 
-  [jobs power]
-  (let [data  (map #(let [[score label] (clojure.string/split % score-label-separator-regex)] 
-                       [(Math/pow (Double/parseDouble score) power) label]) jobs)
-        total (apply + (map first data))]
-    (sort-by first > 
-      (map (fn [[score label]] [(* 100 (/ score total)) label]) data))))
+(defn power-transform-job-scores [jobs power]
+  "Power is used to adjust the distribution of scores so that the users can better know
+  which jobs suit them best. Instead of linear scaling, exponential scaling is used.
+  power=4 is recommended, since it will differentiate better between close scores. 
+  Instead of having almost all the percentages in the 15-25% range, it will spread them out more."
+  (map #(let [[score label] (clojure.string/split % score-label-separator-regex)] 
+          [(Math/pow (Double/parseDouble score) power) label]) jobs))
+
+(defn normalize-job-scores-to-percent [pairs]
+  (let [total (apply + (map first pairs))]
+    (map (fn [[score label]] [(* 100 (/ score total)) label]) pairs)))
+
+(defn rank-job-scores-desc
+  [score-label-pairs]
+  (sort-by first > score-label-pairs))
 
 (defn format-jobs 
   [normalized-data]
@@ -215,14 +223,17 @@
         it-job-suitability (it-job-suitability-messages average)
         strengths (strong-areas profile 7)
         weaknesses (weak-areas profile 4)
-        recommended-it-job-positions (recommended-it-job-positions profile)]
+        job-positions (recommended-it-job-positions profile)]
     (println (format "Average interest: %.2f" average))
     (println it-job-suitability)
     (println "Strong areas:" (str/join ", " strengths))
     (println "Weak areas:" (str/join ", " weaknesses))
     (println "Recommended IT job positions:")
-    (doseq [line (-> (normalize-jobs recommended-it-job-positions 4)
-                     (format-jobs))]
+    (doseq [line (-> job-positions
+                 (power-transform-job-scores 4)
+                 (normalize-job-scores-to-percent)
+                 (rank-job-scores-desc)
+                 (format-jobs))]
     (println line))))
 
 (defn -main
