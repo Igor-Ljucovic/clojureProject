@@ -55,7 +55,7 @@
           (recur))))))
 
 ;; HACK: code duplication
-(defn build-profile
+(defn build-scores
   [[data math algorithms physics geometry abstraction optimization engineering hardware ui edge-cases testing
     people ux statistics empathy simplification patience debugging monotony money]]
   {:data              data
@@ -80,19 +80,13 @@
    :monotony          monotony
    :money             money})
 
-;; HACK: code duplication
-(defn strong-areas
-  [profile threshold]
-  (let [filtered (filter (fn [[_ score]] (>= score threshold)) profile)
-        names    (map (fn [[k _]] (name k)) filtered)]
-    (vec (sort names))))
-
-;; HACK: code duplication
-(defn weak-areas
-  [profile threshold]
-  (let [filtered (filter (fn [[_ score]] (<= score threshold)) profile)
-        names    (map (fn [[k _]] (name k)) filtered)]
-    (vec (sort names))))
+(defn it-areas-by-score-threshold
+  [scores comparison-operator threshold]
+  (->> scores
+       (filter (fn [[_ score]] (comparison-operator score threshold)))
+       (map (fn [[k _]] (name k)))
+       sort
+       vec))
 
 (defn score-with-balanced-weights 
   "Calculates a weighted score using balanced (not yet normalized) weights.
@@ -217,13 +211,13 @@
   []
   (println "Rate each topic from 0 (hate it) to 10 (love it).")
   (let [ratings (mapv ask-for-it-topics-ratings questions)
-        profile (build-profile ratings)
+        scores (build-scores ratings)
         total (reduce + ratings)
         average (/ (double total) (count ratings))
         it-job-suitability (it-job-suitability-messages average)
-        strengths (strong-areas profile 7)
-        weaknesses (weak-areas profile 4)
-        job-positions (recommended-it-job-positions profile)]
+        strengths (it-areas-by-score-threshold scores >= 7)
+        weaknesses (it-areas-by-score-threshold scores <= 4)
+        job-positions (recommended-it-job-positions scores)]
     (println (format "Average interest: %.2f" average))
     (println it-job-suitability)
     (println "Strong areas:" (str/join ", " strengths))
