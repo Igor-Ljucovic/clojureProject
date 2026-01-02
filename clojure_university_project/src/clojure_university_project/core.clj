@@ -34,20 +34,13 @@
 (def ^:private score-label-separator-regex
   (re-pattern (java.util.regex.Pattern/quote score-label-separator)))
 
-;; had to separate parsing to avoid "Cannot recur across try" error
-(defn- parse-rating-double
-  [s]
-  (try
-    (Double/parseDouble s)
-    (catch NumberFormatException _ nil)))
-
 (defn ask-for-it-topics-ratings
   [question]
   (loop []
     (println question)
     (flush)
     (let [input (read-line)
-          value (parse-rating-double input)]
+          value (parse-double input)]
       (if (and value (<= 0 value 10))
         value
         (do
