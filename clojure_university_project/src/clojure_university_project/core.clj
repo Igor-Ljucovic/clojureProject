@@ -80,7 +80,7 @@
    :monotony          monotony
    :money             money})
 
-(defn it-areas-by-score-threshold
+(defn it-skills-by-score-threshold
   [scores comparison-operator threshold]
   (->> scores
        (filter (fn [[_ score]] (comparison-operator score threshold)))
@@ -215,13 +215,13 @@
         total (reduce + ratings)
         average (/ (double total) (count ratings))
         it-job-suitability (it-job-suitability-messages average)
-        strengths (it-areas-by-score-threshold scores >= 7)
-        weaknesses (it-areas-by-score-threshold scores <= 4)
+        strengths (it-skills-by-score-threshold scores >= 7)
+        weaknesses (it-skills-by-score-threshold scores <= 4)
         job-positions (recommended-it-job-positions scores)]
     (println (format "Average interest: %.2f" average))
     (println it-job-suitability)
-    (println "Strong areas:" (str/join ", " strengths))
-    (println "Weak areas:" (str/join ", " weaknesses))
+    (println "Strong skills:" (str/join ", " strengths))
+    (println "Weak skills:" (str/join ", " weaknesses))
     (println "Recommended IT job positions:")
     (doseq [line (-> job-positions
                  (power-transform-job-scores 4)
