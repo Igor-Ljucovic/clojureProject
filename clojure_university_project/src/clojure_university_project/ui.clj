@@ -1,0 +1,22 @@
+(ns clojure-university-project.ui)
+
+(defn it-job-suitability-messages 
+  [average]
+  (cond
+    (>= average 8) "You are very likely to enjoy working in IT."
+    (>= average 6) "You probably should work in the IT sector."
+    (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
+    :else          "You probably shouldn't work in the IT sector."))
+
+(defn ask-for-it-topics-ratings
+  [question]
+  (loop []
+    (println question)
+    (flush)
+    (let [input (read-line)
+          value (parse-double input)]
+      (if (and value (<= 0 value 10))
+        value
+        (do
+          (println "Please enter a number from 0 to 10 (decimals allowed).")
+          (recur))))))
