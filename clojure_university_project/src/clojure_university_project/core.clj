@@ -13,11 +13,10 @@
 (defn run-app 
   []
   (println "Rate each topic from 0 (hate it) to 10 (love it).")
-   (let [;; This creates the map directly: {:data 8 :math 10 ...}
+   (let [
         ratings (into {} (for [{:keys [id q]} data/questions]
                           [id (ui/ask-for-it-topics-ratings q)]))
-        total   (reduce + (vals ratings))
-        average (/ (double total) (count ratings))
+        average (data-transformations/average (vals ratings))
         it-job-suitability (ui/it-job-suitability-messages average)
         strengths (utils/it-skills-by-rating-threshold ratings >= 7)
         weaknesses (utils/it-skills-by-rating-threshold ratings <= 4)

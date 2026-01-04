@@ -2,7 +2,11 @@
   (:require
     [clojure.string :as str]))
 
-  (defn normalize-job-ratings-to-percent
+(defn average 
+  [numbers]
+  (/ (apply + numbers) (double (count numbers))))
+
+(defn normalize-job-ratings-to-percent
   [pairs]
   (let [total (apply + (map first pairs))]
     (map (fn [[rating label]] [(* 100 (/ rating total)) label]) pairs)))

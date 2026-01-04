@@ -1,6 +1,7 @@
 (ns clojure-university-project.expert-system
   (:require
-      [clojure-university-project.data :as data]))
+      [clojure-university-project.data :as data]
+      [clojure-university-project.data-transformations :as data-transformations]))
 
 (defn rating-with-balanced-weights 
   "Calculates a weighted rating using balanced (not yet normalized) weights.
@@ -34,3 +35,36 @@
   (mapv (fn [{:keys [label weights]}]
           (rating-with-balanced-weights ratings weights label))
         data/job-weight-sets))
+
+(def career-mapping
+  {"Backend or databases" 
+   [:algorithms :scalability :optimization]
+   
+   "Business Analyst" 
+   [:people :analysis :simplification :data]
+   
+   "Cyber Security, Administration or Networking" 
+   [:analysis :wrong-way]
+   
+   "Data Science, ML or AI" 
+   [:data :math :statistics :algorithms]
+   
+   "Frontend or Graphics Designer" 
+   [:ui :ux :interactivity]
+   
+   "Hardware Engineer" 
+   [:hardware :physics :engineering]
+   
+   "IT Support" 
+   [:people :patience :monotony]
+   
+   "Software Engineer" 
+   [:engineering :abstraction :debugging]
+   
+   "Software Tester" 
+   [:testing :wrong-way :edge-cases]})
+
+(defn calculate-career-scores 
+  [user-answers]
+  (update-vals career-mapping 
+               #(data-transformations/average (keep user-answers %))))
