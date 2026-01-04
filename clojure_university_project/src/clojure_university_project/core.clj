@@ -21,6 +21,7 @@
         strengths (utils/it-skills-by-rating-threshold ratings >= 7)
         weaknesses (utils/it-skills-by-rating-threshold ratings <= 4)
         job-positions (expert-system/recommended-it-job-positions ratings)]
+
     (println (format "Average interest: %.2f" average))
     (println it-job-suitability)
     (println "Strong skills:" (str/join ", " strengths))

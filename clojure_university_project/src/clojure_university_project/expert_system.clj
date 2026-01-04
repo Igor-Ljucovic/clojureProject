@@ -36,35 +36,7 @@
           (rating-with-balanced-weights ratings weights label))
         data/job-weight-sets))
 
-(def career-mapping
-  {"Backend or databases" 
-   [:algorithms :scalability :optimization]
-   
-   "Business Analyst" 
-   [:people :analysis :simplification :data]
-   
-   "Cyber Security, Administration or Networking" 
-   [:analysis :wrong-way]
-   
-   "Data Science, ML or AI" 
-   [:data :math :statistics :algorithms]
-   
-   "Frontend or Graphics Designer" 
-   [:ui :ux :interactivity]
-   
-   "Hardware Engineer" 
-   [:hardware :physics :engineering]
-   
-   "IT Support" 
-   [:people :patience :monotony]
-   
-   "Software Engineer" 
-   [:engineering :abstraction :debugging]
-   
-   "Software Tester" 
-   [:testing :wrong-way :edge-cases]})
-
-(defn calculate-career-scores 
-  [user-answers]
-  (update-vals career-mapping 
-               #(data-transformations/average (keep user-answers %))))
+(defn expert-system->ml-ratings-data-refactor
+  [ratings]
+  (update-vals data/expert-system->ml-mapping 
+    #(data-transformations/average (keep ratings %))))

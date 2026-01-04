@@ -47,6 +47,26 @@
    {:label "Cyber security"
     :weights {:edge-cases 16 :debugging 16}}])
 
+(def expert-system->ml-mapping
+  {"Backend or databases" 
+   [:algorithms :scalability :optimization]
+   "Business Analyst" 
+   [:people :analysis :simplification :data]
+   "Cyber Security, Administration or Networking" 
+   [:analysis :wrong-way]
+   "Data Science, ML or AI" 
+   [:data :math :statistics :algorithms]
+   "Frontend or Graphics Designer" 
+   [:ui :ux :interactivity]
+   "Hardware Engineer" 
+   [:hardware :physics :engineering]
+   "IT Support" 
+   [:people :patience :monotony]
+   "Software Engineer" 
+   [:engineering :abstraction :debugging]
+   "Software Tester" 
+   [:testing :wrong-way :edge-cases]})
+
 (def rating-label-separator "|")
 (def rating-label-separator-regex
   (re-pattern (java.util.regex.Pattern/quote rating-label-separator)))

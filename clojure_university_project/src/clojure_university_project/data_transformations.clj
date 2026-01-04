@@ -29,3 +29,8 @@
   (map #(let [[rating label] (str/split % rating-label-separator-regex)] 
           [(Math/pow (Double/parseDouble rating) power) label]) jobs))
 
+(defn quant->qual 
+  [m labels min-val max-val]
+  (let [n    (count labels)
+        step (/ (- max-val (double min-val)) n)]
+    (update-vals m #(nth labels (min (dec n) (int (max 0 (/ (- % min-val) step))))))))
