@@ -30,19 +30,19 @@
 (def job-weight-sets
   [{:label "Data analytics, data science, ML, AI"
     :weights {:data 160 :statistics 140 :math 120}}
-   {:label "Backend development, systems engineering"
+   {:label "Backend development, databases"
     :weights {:engineering 16 :algorithms 14 :optimization 12}}
    {:label "DevOps"
     :weights {:engineering 14 :debugging 16 :monotony 12}}
    {:label "Embedded systems, IoT, firmware, robotics, hardware-related"
     :weights {:hardware 16 :engineering 12 :physics 12}}
-   {:label "Game development, simulations, graphics"
+   {:label "Game development, simulations, graphics-related"
     :weights {:geometry 14 :algorithms 14 :optimization 14 :math 12}}
-   {:label "Frontend development, mobile development"
+   {:label "Frontend development, mobile app development"
     :weights {:ui 16 :simplification 14 :people 10}}
-   {:label "UX/UI design, product design"
+   {:label "UX/UI design"
     :weights {:ux 16 :empathy 16 :people 10}}
-   {:label "QA engineering, test automation"
+   {:label "QA, test automation"
     :weights {:testing 16 :edge-cases 16 :debugging 14 :monotony 10}}
    {:label "Cyber security"
     :weights {:edge-cases 16 :debugging 16}}])
@@ -66,7 +66,3 @@
    [:engineering :abstraction :debugging]
    "Software Tester" 
    [:testing :wrong-way :edge-cases]})
-
-(def rating-label-separator "|")
-(def rating-label-separator-regex
-  (re-pattern (java.util.regex.Pattern/quote rating-label-separator)))

@@ -6,28 +6,25 @@
   [numbers]
   (/ (apply + numbers) (double (count numbers))))
 
-(defn normalize-job-ratings-to-percent
-  [pairs]
-  (let [total (apply + (map first pairs))]
-    (map (fn [[rating label]] [(* 100 (/ rating total)) label]) pairs)))
+(defn normalize-to-percent-kv
+  [jobs]
+  (let [total (apply + (map second jobs))]
+    (map (fn [[label rating]]
+           [(* 100 (/ rating total)) label]) 
+         jobs)))
 
-(defn rank-job-ratings-desc
-  [rating-label-pairs]
-  (sort-by first > rating-label-pairs))
+(defn sort-desc-kv
+  [col]
+  (sort-by first > col))
 
-(defn format-jobs 
+(defn format-it-job-position-recommendations
   [normalized-data]
   (map (fn [[rating label]] (format "%.1f%% %s" rating label)) 
        normalized-data))
 
-(defn power-transform-job-ratings 
-  "Power is used to adjust the distribution of ratings so that the users can better know
-  which jobs suit them best. Instead of linear scaling, exponential scaling is used.
-  power=4 is recommended, since it will differentiate better between close ratings. 
-  Instead of having almost all the percentages in the 15-25% range, it will spread them out more."
-  [jobs power rating-label-separator-regex]
-  (map #(let [[rating label] (str/split % rating-label-separator-regex)] 
-          [(Math/pow (Double/parseDouble rating) power) label]) jobs))
+(defn power-kv
+  [kvs power]
+  (map (fn [[k v]] [k (Math/pow (double v) power)]) kvs))
 
 (defn quant->qual 
   [m labels min-val max-val]
