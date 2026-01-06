@@ -8,23 +8,22 @@
 
 (defn normalize-to-percent-kv
   [jobs]
-  (let [total (apply + (map second jobs))]
-    (map (fn [[label rating]]
-           [(* 100 (/ rating total)) label]) 
-         jobs)))
+  (let [total (apply + (vals jobs))]
+    (update-vals jobs #(double (* 100 (/ % total))))))
 
 (defn sort-desc-kv
   [col]
-  (sort-by first > col))
+  (sort-by second > col))
 
 (defn format-it-job-position-recommendations
   [normalized-data]
-  (map (fn [[rating label]] (format "%.1f%% %s" rating label)) 
+  (map (fn [[label rating]] 
+         (format "%.1f%% %s" (double rating) label)) 
        normalized-data))
 
 (defn power-kv
   [kvs power]
-  (map (fn [[k v]] [k (Math/pow (double v) power)]) kvs))
+  (update-vals kvs #(Math/pow (double %) power)))
 
 (defn quant->qual 
   [m labels min-val max-val]

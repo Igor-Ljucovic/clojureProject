@@ -23,8 +23,8 @@
         strengths (utils/it-skills-by-rating-threshold ratings >= 7)
         weaknesses (utils/it-skills-by-rating-threshold ratings <= 4)
         job-positions (expert-system/recommended-it-job-positions ratings)]
-        (println ratings)
-        (println job-positions)
+        ;;(println ratings)
+        ;;(println job-positions)
     (println (format "Average interest: %.2f" average))
     (println it-job-suitability)
     (println "Strong skills:" (str/join ", " strengths))
@@ -34,7 +34,8 @@
                  (data-transformations/power-kv 4)
                  (data-transformations/normalize-to-percent-kv)
                  (data-transformations/sort-desc-kv)
-                 (data-transformations/format-it-job-position-recommendations))]
+                 (data-transformations/format-it-job-position-recommendations)
+                 )]
     (println line))))
 
 (defn -main
