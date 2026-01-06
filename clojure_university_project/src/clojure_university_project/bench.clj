@@ -1,6 +1,6 @@
 (ns clojure-university-project.bench
   (:require [criterium.core :as c]
-            [clojure-university-project.core :as core]))
+            [clojure-university-project.expert-system :as es]))
 
 
 (def input
@@ -15,4 +15,4 @@
 
 (defn bench-recommended []
   (c/quick-bench
-    (core/recommended-it-job-jositions input)))
+    (es/recommended-it-job-positions input)))

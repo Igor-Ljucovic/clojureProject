@@ -8,10 +8,3 @@
        sort
        vec))
 
-(defn random-ratings
-  [n min-val max-val]
-  (vec
-    (repeatedly n
-      #(let [rand-num (+ min-val (* (rand) (- max-val min-val)))] 
-       (/ (Math/round (* 100 rand-num)) 100.0)))))
-
