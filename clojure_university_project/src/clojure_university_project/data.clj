@@ -29,23 +29,23 @@
 
 (def job-weight-sets
   [{:label "Data analytics, data science, ML, AI"
-    :weights {:data 160 :statistics 140 :math 120}}
+    :weights {:data 8 :statistics 7 :math 6}}
    {:label "Backend development, databases"
-    :weights {:engineering 16 :algorithms 14 :optimization 12}}
+    :weights {:engineering 8 :algorithms 7 :optimization 6}}
    {:label "DevOps"
-    :weights {:engineering 14 :debugging 16 :monotony 12}}
+    :weights {:engineering 7 :debugging 8 :monotony 6}}
    {:label "Embedded systems, IoT, firmware, robotics, hardware-related"
-    :weights {:hardware 16 :engineering 12 :physics 12}}
+    :weights {:hardware 8 :engineering 6 :physics 6}}
    {:label "Game development, simulations, graphics-related"
-    :weights {:geometry 14 :algorithms 14 :optimization 14 :math 12}}
+    :weights {:geometry 7 :algorithms 7 :optimization 7 :math 6}}
    {:label "Frontend development, mobile app development"
-    :weights {:ui 16 :simplification 14 :people 10}}
+    :weights {:ui 8 :simplification 7 :people 5}}
    {:label "UX/UI design"
-    :weights {:ux 16 :empathy 16 :people 10}}
+    :weights {:ux 8 :empathy 8 :people 5}}
    {:label "QA, test automation"
-    :weights {:testing 16 :edge-cases 16 :debugging 14 :monotony 10}}
+    :weights {:testing 8 :edge-cases 8 :debugging 7 :monotony 5}}
    {:label "Cyber security"
-    :weights {:edge-cases 16 :debugging 16}}])
+    :weights {:edge-cases 8 :debugging 8}}])
 
 (def expert-system->ml-mapping
   {"Backend or databases" 

@@ -8,8 +8,9 @@
   (sut/normalize-to-percent-kv
     {"Data analytics, data science, ML, AI" 260
      "Backend development, databases" 160})
-    => (contains {"Data analytics, data science, ML, AI" (roughly 61.90 0.01) 
-                  "Backend development, databases"       (roughly 38.09 0.01)}))
+    ;; (260+160) = 420, 260/420 = 61.90..., 160/420 = 38.09...
+  => (contains {"Data analytics, data science, ML, AI" (roughly 61.90 0.01) 
+                "Backend development, databases"       (roughly 38.09 0.01)}))
 
 (fact "format-it-job-position-recommendations"
     (sut/format-it-job-position-recommendations 
