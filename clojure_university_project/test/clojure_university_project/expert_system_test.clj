@@ -2,10 +2,12 @@
   (:require [midje.sweet :refer :all]
             [clojure-university-project.expert-system :as sut]))
 
+;; must add contains in some functions because roughly won't be evaluated otherwise
+
 (facts "balance-weights"
   (let [ratings {:data 4 :statistics 8 :math 7}
         weights {:data 160 :statistics 140 :math 120}]
-    (sut/balance-weights ratings weights "ignored-label")
+    (sut/balance-weights ratings weights)
     ;; (4*160 + 8*140 + 7*120) / (160+140+120) = 2600/420 = 6.190476...
     => (roughly 6.19 0.01)))
 
@@ -13,8 +15,8 @@
     (let [ratings {:data 4 :statistics 8 :math 7}
           w1      {:data 16 :statistics 14 :math 12}
           w2      {:data 160 :statistics 140 :math 120}]
-      (sut/balance-weights ratings w1 "placeholderString1")
-      => (roughly (sut/balance-weights ratings w2 "placeholderString2") 0.01)))
+      (sut/balance-weights ratings w1)
+      => (roughly (sut/balance-weights ratings w2) 0.01)))
 
 ;; The result will change every time the expert system logic changes.
 (facts "recommended-it-job-positions"
@@ -44,6 +46,7 @@
      :wrong-way      3
      :interactivity  0
      :scalability    8})
+     ;; the values seem arbitrary, but they are temporary and are used for skill comparison
   => (contains
        {"UX/UI design"                                                (roughly 2.76 0.01)
         "Embedded systems, IoT, firmware, robotics, hardware-related" (roughly 5.80 0.01)
@@ -52,7 +55,7 @@
         "Data analytics, data science, ML, AI"                        (roughly 9.28 0.01)
         "Game development, simulations, graphics-related"             (roughly 9.48 0.01)
         "DevOps"                                                      (roughly 5.90 0.01)
-        "Frontend development, mobile app development"                (roughly 3.8 0.01)
+        "Frontend development, mobile app development"                (roughly 3.80 0.01)
         "QA, test automation"                                         (roughly 5.96 0.01)}))
 
 ;; The result will change every time the expert system logic changes.
@@ -83,6 +86,7 @@
      :wrong-way      3
      :interactivity  0
      :scalability    8})
+     ;; (testing + wrong-way + edge-cases)/3 = (5+3+7)/3 = 5.0 etc.
   => (contains {"Backend or databases"                         (roughly 8.66 0.01)
                 "Business Analyst"                             (roughly 5.50 0.01)
                 "Cyber Security, Administration or Networking" (roughly 4.00 0.01)

@@ -4,7 +4,7 @@
     [clojure-university-project.data-transformations :as data-transformations]))
 
 (defn balance-weights 
-  [ratings weights label]
+  [ratings weights]
   (let [num (reduce-kv (fn [acc key value] (+ acc (* value (get ratings key)))) 0 weights)
         den (reduce + (vals weights))]
     (double (/ num den))))
@@ -13,7 +13,7 @@
   [ratings]
   (into {}
         (map (fn [{:keys [label weights]}]
-               [label (balance-weights ratings weights label)])
+               [label (balance-weights ratings weights)])
                 data/job-weight-sets)))
 
 (defn expert-system->ml-ratings-data-refactor
