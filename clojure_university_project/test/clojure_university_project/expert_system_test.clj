@@ -5,15 +5,15 @@
 ;; must add contains in some functions because roughly won't be evaluated otherwise
 
 (facts "balance-weights"
-  (let [ratings {:data 4 :statistics 8 :math 7}
-        weights {:data 160 :statistics 140 :math 120}]
+  (let [ratings {:data 4   :statistics 8   :math 7}
+        weights {:data 8   :statistics 7   :math 6}]
     (sut/balance-weights ratings weights)
     ;; (4*160 + 8*140 + 7*120) / (160+140+120) = 2600/420 = 6.190476...
     => (roughly 6.19 0.01)))
 
   (fact "balance-weights - scaling all weights by the same factor doesn't change the result"
-    (let [ratings {:data 4 :statistics 8 :math 7}
-          w1      {:data 16 :statistics 14 :math 12}
+    (let [ratings {:data 4   :statistics 8   :math 7}
+          w1      {:data 16  :statistics 14  :math 12}
           w2      {:data 160 :statistics 140 :math 120}]
       (sut/balance-weights ratings w1)
       => (roughly (sut/balance-weights ratings w2) 0.01)))

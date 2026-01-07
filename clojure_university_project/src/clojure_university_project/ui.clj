@@ -1,6 +1,8 @@
-(ns clojure-university-project.ui)
+(ns clojure-university-project.ui
+  (:require
+    [clojure.string :as str]))
 
-(defn it-job-suitability-messages 
+(defn it-job-position-suitability-message
   [average]
   (cond
     (>= average 8) "You are very likely to enjoy working in IT."
@@ -8,7 +10,7 @@
     (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
     :else          "You probably shouldn't work in the IT sector."))
 
-(defn ask-for-it-topics-ratings
+(defn ask-for-it-skills-ratings
   [question]
   (loop []
     (println question)
@@ -20,3 +22,28 @@
         (do
           (println "Please enter a number from 0 to 10 (decimals allowed).")
           (recur))))))
+
+(defn print-intro!
+  []
+  (println
+    "Rate each topic from 0 to 10 (decimals allowed) based on how interested you are in it
+            and how good you think you are at it."))
+
+(defn ask-all-ratings!
+  [questions]
+  (into {}
+        (for [{:keys [id q]} questions]
+          [id (ask-for-it-skills-ratings q)])))
+
+(defn print-summary!
+  [{:keys [average suitability strengths weaknesses]}]
+  (println (format "Average interest: %.2f" average))
+  (println suitability)
+  (println "Strong skills: " (str/join ", " strengths))
+  (println "Weak skills: "   (str/join ", " weaknesses)))
+
+(defn print-it-job-position-recommendations!
+  [lines]
+  (println "Recommended IT job positions:")
+  (doseq [line lines]
+    (println line)))

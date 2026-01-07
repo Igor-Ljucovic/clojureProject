@@ -13,11 +13,11 @@
                 "Backend development, databases"       (roughly 38.09 0.01)}))
 
 (fact "format-it-job-position-recommendations"
-    (sut/format-it-job-position-recommendations 
-      {"Data analytics" 61.904 
-       "Backend"        38.095})
-    => (contains ["61.9% Data analytics" 
-                  "38.1% Backend"]))
+  (sut/format-it-job-position-recommendations 
+    {"Data analytics" 61.904 
+      "Backend"       38.095})
+  => (contains ["61.9% Data analytics" 
+                "38.1% Backend"]))
 
 (fact "quant->qual"
   (let [scores {"Backend" 1.5
