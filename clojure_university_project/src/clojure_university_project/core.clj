@@ -7,7 +7,7 @@
     [clojure-university-project.data :as data])
   (:gen-class))
 
-(defn build-summary
+(defn it-job-position-summary
   [ratings]
   (let [average     (data-transformations/average (vals ratings))
         suitability (ui/it-job-position-suitability-message average)
@@ -18,9 +18,9 @@
      :strengths   strengths
      :weaknesses  weaknesses}))
 
-(defn build-it-job-position-recommendations
+(defn it-job-position-recommendations
   [ratings]
-  (-> (expert-system/recommended-it-job-positions ratings)
+  (-> (expert-system/recommended-it-job-position-weights ratings)
       (data-transformations/power-kv 4)
       (data-transformations/normalize-to-percent-kv)
       (data-transformations/sort-desc-kv)
@@ -30,8 +30,8 @@
   []
   (ui/print-intro!)
   (let [ratings         (ui/ask-all-ratings! data/questions)
-        summary         (build-summary ratings)
-        recommendations (build-it-job-position-recommendations ratings)]
+        summary         (it-job-position-summary ratings)
+        recommendations (it-job-position-recommendations ratings)]
     (ui/print-summary! summary)
     (ui/print-it-job-position-recommendations! recommendations)))
 

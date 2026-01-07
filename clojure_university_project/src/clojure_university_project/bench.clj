@@ -15,4 +15,4 @@
 
 (defn bench-recommended []
   (c/quick-bench
-    (es/recommended-it-job-positions input)))
+    (es/recommended-it-job-position-weights input)))

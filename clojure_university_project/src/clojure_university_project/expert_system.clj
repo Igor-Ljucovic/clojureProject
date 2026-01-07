@@ -9,7 +9,7 @@
         den (reduce + (vals weights))]
     (double (/ num den))))
 
-(defn recommended-it-job-positions 
+(defn recommended-it-job-position-weights
   [ratings]
   (into {}
         (map (fn [{:keys [label weights]}]

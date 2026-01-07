@@ -19,8 +19,8 @@
       => (roughly (sut/balance-weights ratings w2) 0.01)))
 
 ;; The result will change every time the expert system logic changes.
-(facts "recommended-it-job-positions"
-  (sut/recommended-it-job-positions
+(facts "recommended-it-job-position-weights"
+  (sut/recommended-it-job-position-weights
     {:data           9
      :statistics     9
      :math           10
