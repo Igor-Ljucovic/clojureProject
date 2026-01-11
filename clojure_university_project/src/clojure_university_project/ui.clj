@@ -6,7 +6,7 @@
   [average]
   (cond
     (>= average 8) "You are very likely to enjoy working in IT."
-    (>= average 6) "You probably should work in the IT sector."
+    (>= average 6) "You probably could work in the IT sector."
     (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
     :else          "You probably shouldn't work in the IT sector."))
 
@@ -37,10 +37,10 @@
 
 (defn print-summary!
   [{:keys [average suitability strengths weaknesses]}]
-  (println (format "Average interest: %.2f" average))
+  (println (format "Average it job skill: %.2f" average))
   (println suitability)
-  (println "Strong skills: " (str/join ", " strengths))
-  (println "Weak skills: "   (str/join ", " weaknesses)))
+  (println "Strong skills:" (str/join ", " strengths))
+  (println "Weak skills:"   (str/join ", " weaknesses)))
 
 (defn print-it-job-position-recommendations!
   [lines]
