@@ -35,7 +35,7 @@
         recommendations            (it-job-position-recommendations ratings)
         ml-quant-ratings           (expert-system/expert-system->ml-ratings-data-refactor ratings)
         ml-qual-ratings-unordered  (data-transformations/quant->qual ml-quant-ratings data/ML-LABELS 0 10)
-        ml-ratings                 (utils/ordered-map ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
+        ml-ratings                 (utils/ordered-values ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
     (ui/print-summary! summary)
     (ui/print-it-job-position-recommendations! recommendations)
     (evaluation/run-ml! ml-ratings)))

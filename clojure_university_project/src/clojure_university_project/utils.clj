@@ -8,13 +8,10 @@
        sort
        vec))
 
-(defn ordered-map
-  "Creates a new map whose iteration order follows `key-order`.
-   Missing keys are skipped. Extra keys are ignored."
+(defn ordered-values
+  "fixes the problem of unordered maps by returning values in the specified key order"
   [m key-order]
-  (into (array-map)
-        (map (fn [k] [k (get m k)]))
-        key-order))
+  (mapv #(get m %) key-order))
 
 (defmacro silently [& body]
   `(binding [*out* (java.io.StringWriter.)]
