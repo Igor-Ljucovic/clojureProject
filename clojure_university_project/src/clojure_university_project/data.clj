@@ -27,6 +27,25 @@
    {:id :monotony       :q "Would you mind solving the same problems the majority of the time? (0-10)"}
    {:id :money          :q "How much do you care about how much money you'll make? (0-10)"}])
 
+(def ML-LABELS
+  ["Not Interested" "Poor" "Beginner" "Average" "Intermediate" "Advanced"])
+
+(def ML-FEATURE-ORDER
+  ["Databases"
+   "Hardware"
+   "Security"
+   "Networking"
+   "Software development"
+   "Programming skills"
+   "Project management"
+   "Core Technical"
+   "Communication"
+   "AI ML"
+   "Software engineering"
+   "Business analysis and data science"
+   "Communication skills"
+   "IT graphics designing"])
+
 (def job-weight-sets
   [{:label "Data analytics, data science, ML, AI"
     :weights {:data 8 :statistics 7 :math 6}}
@@ -48,21 +67,31 @@
     :weights {:edge-cases 8 :debugging 8}}])
 
 (def expert-system->ml-mapping
-  {"Backend or databases" 
-   [:algorithms :scalability :optimization]
-   "Business Analyst" 
-   [:people :analysis :simplification :data]
-   "Cyber Security, Administration or Networking" 
-   [:analysis :wrong-way]
-   "Data Science, ML or AI" 
-   [:data :math :statistics :algorithms]
-   "Frontend or Graphics Designer" 
-   [:ui :ux :interactivity]
-   "Hardware Engineer" 
-   [:hardware :physics :engineering]
-   "IT Support" 
-   [:people :patience :monotony]
-   "Software Engineer" 
-   [:engineering :abstraction :debugging]
-   "Software Tester" 
-   [:testing :wrong-way :edge-cases]})
+  {"Databases"
+   [:data :algorithms :scalability :optimization :debugging]
+   "Hardware"
+   [:hardware :physics :engineering :debugging :optimization]
+   "Security"
+   [:edge-cases :wrong-way :debugging :analysis]
+   "Networking"
+   [:monotony :debugging :patience :analysis]
+   "Software development"
+   [:engineering :abstraction :algorithms :debugging]
+   "Programming skills"
+   [:algorithms :abstraction :optimization :debugging]
+   "Project management"
+   [:people :patience :simplification :scalability :money]
+   "Core Technical"
+   [:engineering :algorithms :debugging :optimization]
+   "Communication"
+   [:people :empathy :patience :simplification]
+   "AI ML"
+   [:data :math :statistics :algorithms :abstraction]
+   "Software engineering"
+   [:scalability :engineering :abstraction :debugging :testing]
+   "Business analysis and data science"
+   [:people :analysis :data :simplification :statistics]
+   "Communication skills"
+   [:people :empathy :patience :simplification]
+   "IT graphics designing"
+   [:ui :ux :interactivity :geometry]})

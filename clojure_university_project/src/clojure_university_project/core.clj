@@ -4,7 +4,8 @@
     [clojure-university-project.data-transformations :as data-transformations]
     [clojure-university-project.expert-system :as expert-system]
     [clojure-university-project.ui :as ui]
-    [clojure-university-project.data :as data])
+    [clojure-university-project.data :as data]
+    [clojure-university-project.ml.evaluation :as evaluation])
   (:gen-class))
 
 (defn it-job-position-summary
@@ -29,11 +30,15 @@
 (defn run-app
   []
   (ui/print-intro!)
-  (let [ratings         (ui/ask-all-ratings! data/questions)
-        summary         (it-job-position-summary ratings)
-        recommendations (it-job-position-recommendations ratings)]
+  (let [ratings                    (ui/ask-all-ratings! data/questions)
+        summary                    (it-job-position-summary ratings)
+        recommendations            (it-job-position-recommendations ratings)
+        ml-quant-ratings           (expert-system/expert-system->ml-ratings-data-refactor ratings)
+        ml-qual-ratings-unordered  (data-transformations/quant->qual ml-quant-ratings data/ML-LABELS 0 10)
+        ml-ratings                 (utils/ordered-map ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
     (ui/print-summary! summary)
-    (ui/print-it-job-position-recommendations! recommendations)))
+    (ui/print-it-job-position-recommendations! recommendations)
+    (evaluation/run-ml! ml-ratings)))
 
 (defn -main
   [& args]
