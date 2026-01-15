@@ -1,10 +1,8 @@
-(defproject clojure_university_project "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "https://example.com/FIXME"
+(defproject clojure_university_project "2.0.0-Alpha"
+  :description "CLI expert system that recommends IT job positions based on user's interests/skills"
+  :url "https://donthaveoneyet.com"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-
-  :managed-dependencies [[org.slf4j/slf4j-api "2.0.7"]]
 
   :dependencies
   [[org.clojure/clojure "1.11.1"]
@@ -12,7 +10,8 @@
    [scicloj/metamorph "0.2.4"]
    [scicloj/metamorph.ml "0.8.2" :exclusions [org.slf4j/slf4j-simple]]
    [scicloj/scicloj.ml.smile "7.4.1" :exclusions [org.slf4j/slf4j-simple]]
-   [ch.qos.logback/logback-classic "1.4.14"]]
+   [ch.qos.logback/logback-classic "1.4.14"]
+   [org.slf4j/slf4j-api "2.0.7"]]
 
   :main ^:skip-aot clojure-university-project.core
   :target-path "target/%s"
