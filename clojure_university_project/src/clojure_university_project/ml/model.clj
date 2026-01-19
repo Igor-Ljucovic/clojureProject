@@ -11,13 +11,15 @@
 (defn require-smile! []
   (utils/silently (require 'scicloj.ml.smile.classification)))
 
-(defn calculate-accuracy [test-dataset prediction-dataset target-column]
+(defn calculate-accuracy 
+  [test-dataset prediction-dataset target-column]
   (let [y-true (ds/column test-dataset target-column)
         y-pred (take (count y-true) (ds/column prediction-dataset target-column))]
     (/ (count (filter true? (map = y-true y-pred)))
        (count y-true))))
 
-(defn predict-probabilities [test-dataset new-person model-pipe fit-ctx roles]
+(defn predict-probabilities 
+  [test-dataset new-person model-pipe fit-ctx roles]
   (let [prediction-dataset (pipe/transform-data (ds/concat test-dataset new-person) model-pipe fit-ctx)
         row                (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
         probabilities      (->> roles
@@ -25,7 +27,8 @@
                              (sort-by second >))]
     {:it-job-position-predictions probabilities}))
 
-(defn train-once! []
+(defn train-once! 
+  []
   (require-smile!)
   (let [{:keys [dataset feature-columns roles]} (pipe/load-dataset config/FILE-PATH config/TARGET-COLUMN)
         shuffled  (ds/shuffle dataset {:seed config/SEED})
@@ -48,7 +51,8 @@
      :fit-context     fit-context
      :accuracy        accuracy}))
 
-(defn init-model! []
+(defn init-model! 
+  []
   (or @model-state
       (let [trained-model-state (train-once!)]
         (if (compare-and-set! model-state nil trained-model-state)

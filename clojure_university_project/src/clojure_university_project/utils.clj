@@ -9,7 +9,7 @@
        vec))
 
 (defn ordered-values
-  "fixes the problem of unordered maps by returning values in the specified key order"
+  "This is needed because Clojure hash-maps do not guarantee iteration order"
   [m key-order]
   (mapv #(get m %) key-order))
 

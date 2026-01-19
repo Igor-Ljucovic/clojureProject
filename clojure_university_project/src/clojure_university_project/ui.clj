@@ -35,7 +35,7 @@
         (for [{:keys [id q]} questions]
           [id (ask-for-it-skills-ratings q)])))
 
-(defn print-summary!
+(defn print-it-job-position-summary!
   [{:keys [average suitability strengths weaknesses]}]
   (println (format "Average it job skill: %.2f" average))
   (println suitability)

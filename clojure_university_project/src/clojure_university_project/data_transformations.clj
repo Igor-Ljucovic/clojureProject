@@ -1,15 +1,13 @@
-(ns clojure-university-project.data-transformations
-  (:require
-    [clojure.string :as str]))
+(ns clojure-university-project.data-transformations)
 
 (defn average 
   [numbers]
   (/ (apply + numbers) (double (count numbers))))
 
 (defn normalize-to-percent-kv
-  [jobs]
-  (let [total (apply + (vals jobs))]
-    (update-vals jobs #(double (* 100 (/ % total))))))
+  [numbers]
+  (let [total (apply + (vals numbers))]
+    (update-vals numbers #(double (* 100 (/ % total))))))
 
 (defn sort-desc-kv
   [col]
