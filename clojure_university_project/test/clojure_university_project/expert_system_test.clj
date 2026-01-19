@@ -2,7 +2,7 @@
   (:require [midje.sweet :refer :all]
             [clojure-university-project.expert-system :as sut]))
 
-;; must add contains in some functions because roughly won't be evaluated otherwise
+;; must add "contains" in some functions because roughly won't be evaluated otherwise
 
 (facts "balance-weights"
   (let [ratings {:data 4   :statistics 8   :math 7}
@@ -87,12 +87,18 @@
      :interactivity  0
      :scalability    8})
      ;; (testing + wrong-way + edge-cases)/3 = (5+3+7)/3 = 5.0 etc.
-  => (contains {"Backend or databases"                         (roughly 8.66 0.01)
-                "Business Analyst"                             (roughly 5.50 0.01)
-                "Cyber Security, Administration or Networking" (roughly 4.00 0.01)
-                "Data Science, ML or AI"                       (roughly 9.25 0.01)
-                "Frontend or Graphics Designer"                (roughly 2.33 0.01)
-                "Hardware Engineer"                            (roughly 6.00 0.01)
-                "IT Support"                                   (roughly 4.33 0.01)
-                "Software Engineer"                            (roughly 7.00 0.01)
-                "Software Tester"                              (roughly 5.00 0.01)}))
+  => (contains {"AI ML"                              (roughly 8.80 0.01)
+                "Business analysis and data science" (roughly 6.20 0.01)
+                "Communication"                      (roughly 4.50 0.01)
+                "Communication skills"               (roughly 4.50 0.01)
+                "Core Technical"                     (roughly 8.00 0.01)
+                "Databases"                          (roughly 8.60 0.01)
+                "Hardware"                           (roughly 7.00 0.01)
+                "IT graphics designing"              (roughly 4.25 0.01)
+                "Networking"                         (roughly 6.00 0.01)
+                "Programming skills"                 (roughly 8.25 0.01)
+                "Project management"                 (roughly 6.40 0.01)
+                "Security"                           (roughly 5.75 0.01)
+                "Software development"               (roughly 7.50 0.01)
+                "Software engineering"               (roughly 6.80 0.01)}))
+                

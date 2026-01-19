@@ -2,7 +2,7 @@
   (:require [midje.sweet :refer :all]
             [clojure-university-project.data-transformations :as sut]))
 
-;; must add contains in some functions because roughly won't be evaluated otherwise
+;; must add "contains" in some functions because roughly won't be evaluated otherwise
 
 (fact "normalize-to-percent-kv"
   (sut/normalize-to-percent-kv
