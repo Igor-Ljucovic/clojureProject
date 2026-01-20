@@ -11,7 +11,7 @@
 (defn it-job-position-summary
   [user-ratings]
   (let [average     (dt/average (vals user-ratings))
-        suitability (ui/it-job-position-suitability-message average)
+        suitability (ui/it-job-position-suitability->string average)
         strengths   (utils/it-skills-by-rating-threshold user-ratings >= 7)
         weaknesses  (utils/it-skills-by-rating-threshold user-ratings <= 4)]
     {:average     average
@@ -29,15 +29,15 @@
 
 (defn run-app
   []
-  (ui/print-intro!)
+  (println (ui/app-intro->string))
   (let [user-ratings               (ui/ask-all-ratings! data/questions)
         es-summary                 (it-job-position-summary user-ratings)
         es-recommendations         (it-job-position-recommendations user-ratings)
         ml-quant-ratings           (es/expert-system->ml-ratings-data-refactor user-ratings)
         ml-qual-ratings-unordered  (dt/quant->qual ml-quant-ratings data/ML-LABELS 0 10)
         ml-ratings                 (utils/ordered-values ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
-    (ui/print-it-job-position-summary! es-summary)
-    (ui/print-it-job-position-recommendations! es-recommendations)
+    (println (ui/it-job-position-summary->string es-summary))
+    (println (ui/it-job-position-recommendations->string es-recommendations))
     (eval/print-report! (eval/predict! ml-ratings))))
 
 (defn -main
