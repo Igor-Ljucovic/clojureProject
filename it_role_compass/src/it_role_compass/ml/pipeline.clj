@@ -7,7 +7,7 @@
 
     [it-role-compass.utils :as utils]))
 
-(defn load-dataset 
+(defn load-dataset
   [file-path target-column]
   (let [dataset (ds/->dataset file-path {:key-fn keyword})]
     {:dataset         dataset
