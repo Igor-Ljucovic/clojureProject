@@ -16,3 +16,4 @@
                    "60.10% Cyber Security\n"
                    "32.70% IT support\n"
                    " 7.20% Backend tester")))
+                   
