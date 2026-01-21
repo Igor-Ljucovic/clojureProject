@@ -7,10 +7,11 @@
     [it-role-compass.ml.pipeline :as pipe]
     [it-role-compass.ml.model :as model]))
 
-(defn- require-smile! []
+(defn- require-smile! 
+  []
   (utils/silently (require 'scicloj.ml.smile.classification)))
 
-(defn predict-probabilities 
+(defn rank-predicted-probabilities 
   [test-dataset new-person model-pipe fit-context roles]
   (let [prediction-dataset (pipe/run-pipeline (ds/concat test-dataset new-person) model-pipe fit-context)
         row                (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
@@ -26,6 +27,6 @@
         new-person (ds/->dataset [(assoc (zipmap feature-columns user-skills)
                                          config/TARGET-COLUMN
                                          (first roles))])
-        {:keys [it-job-position-predictions]} (predict-probabilities test new-person pipe fit-context roles)]
+        {:keys [it-job-position-predictions]} (rank-predicted-probabilities test new-person pipe fit-context roles)]
     {:it-job-position-predictions it-job-position-predictions
      :accuracy                    accuracy}))
