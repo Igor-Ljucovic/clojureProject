@@ -40,7 +40,7 @@
         ml-ratings                 (utils/ordered-values ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
     (println (ui/it-job-position-summary->string es-summary))
     (println (ui/it-job-position-recommendations->string es-recommendations))
-    (ml-ui/print-report! (inference/predict! ml-ratings))))
+    (println (ml-ui/machine-learning-report->string (inference/predict! ml-ratings)))))
 
 (defn- -main
   [& args]

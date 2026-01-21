@@ -1,8 +1,12 @@
-(ns it-role-compass.ml.ui)
+(ns it-role-compass.ml.ui
+  (:require
+      [clojure.string :as str]))
 
-(defn print-report!
+(defn machine-learning-report->string
   [{:keys [accuracy it-job-position-predictions]}]
-  (println (format "Model accuracy: %.2f%%" (* 100 (double accuracy))))
-  (println "All job probabilities:")
-  (doseq [[it-job-position probability] it-job-position-predictions]
-    (println (format "%5.2f%% %s" (* 100 (double probability)) it-job-position))))
+  (let [header [(format "Model accuracy: %.2f%%" (* 100 (double accuracy)))
+                "All job probabilities:"]
+        lines  (map (fn [[job probability]] 
+                      (format "%5.2f%% %s" (* 100 (double probability)) job))
+                    it-job-position-predictions)]
+    (str/join "\n" (into header lines))))

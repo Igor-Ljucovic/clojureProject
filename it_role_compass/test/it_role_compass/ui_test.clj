@@ -11,7 +11,7 @@
                          val)
             mock-write  (fn [_] nil)] ;; We don't need to log output for success tests
 
-        (sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => ?expected))
+        (#'sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => ?expected))
     ?input   ?expected
     "0"      0.0
     "10"     10.0
@@ -26,7 +26,7 @@
                        val)
           mock-write  #(swap! output-log conj %)]
       
-      (sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => 7.5
+      (#'sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => 7.5
       (some #{"Please enter a number from 0 to 10 (decimals allowed)."} @output-log) => truthy
       ;; The error message is expected exactly twice (once for "abc", once for "15")
       (count (filter #(= % "Please enter a number from 0 to 10 (decimals allowed).") @output-log)) => 2
@@ -37,5 +37,5 @@
           mock-read        (fn [] "5")
           mock-write      #(swap! written-messages conj %)]
       
-      (sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => 5.0
+      (#'sut/ask-for-it-skills-rating "IT skill question..." mock-read mock-write) => 5.0
       (first @written-messages) => "IT skill question...")))

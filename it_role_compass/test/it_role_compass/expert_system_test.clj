@@ -7,7 +7,7 @@
 (facts "balance-weights"
   (let [ratings {:data 4   :statistics 8   :math 7}
         weights {:data 8   :statistics 7   :math 6}]
-    (sut/balance-weights ratings weights)
+    (#'sut/balance-weights ratings weights)
     ;; (4*160 + 8*140 + 7*120) / (160+140+120) = 2600/420 = 6.190476...
     => (roughly 6.19 0.01)))
 
@@ -15,8 +15,8 @@
     (let [ratings {:data 4   :statistics 8   :math 7}
           w1      {:data 16  :statistics 14  :math 12}
           w2      {:data 160 :statistics 140 :math 120}]
-      (sut/balance-weights ratings w1)
-      => (roughly (sut/balance-weights ratings w2) 0.01)))
+      (#'sut/balance-weights ratings w1)
+      => (roughly (#'sut/balance-weights ratings w2) 0.01)))
 
 ;; The result will change every time the expert system logic changes.
 (facts "recommended-it-job-position-weights"
