@@ -12,7 +12,7 @@
 
 (defn predict-probabilities 
   [test-dataset new-person model-pipe fit-context roles]
-  (let [prediction-dataset (pipe/transform-data (ds/concat test-dataset new-person) model-pipe fit-context)
+  (let [prediction-dataset (pipe/run-pipeline (ds/concat test-dataset new-person) model-pipe fit-context)
         row                (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
         probabilities      (->> roles
                              (map (fn [r] [r (double (get row r 0.0))]))

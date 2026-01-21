@@ -23,12 +23,12 @@
         train     (ds/select-rows shuffled (vec (range 0 split-idx)))
         test      (ds/select-rows shuffled (vec (range split-idx row-cnt)))
 
-        model-pipe (pipe/build-pipe feature-columns config/TARGET-COLUMN config/RANDOM-FOREST-MODEL)
-        fit-context    (utils/silently (mm/fit-pipe train model-pipe))
+        model-pipe  (pipe/build-model-pipeline feature-columns config/TARGET-COLUMN config/RANDOM-FOREST-MODEL)
+        fit-context (utils/silently (mm/fit-pipe train model-pipe))
 
-        pre-pipe           (pipe/build-preproc-pipe feature-columns config/TARGET-COLUMN)
-        test-ready         (pipe/transform-data test pre-pipe fit-context)
-        prediction-dataset (pipe/transform-data test model-pipe fit-context)
+        pre-pipe           (pipe/build-encoding-pipeline feature-columns config/TARGET-COLUMN)
+        test-ready         (pipe/run-pipeline test pre-pipe fit-context)
+        prediction-dataset (pipe/run-pipeline test model-pipe fit-context)
         accuracy           (evaluation/calculate-accuracy test-ready prediction-dataset config/TARGET-COLUMN)]
     {:feature-columns feature-columns
      :roles           roles
