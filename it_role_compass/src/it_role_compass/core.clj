@@ -5,7 +5,9 @@
     [it-role-compass.expert-system :as es]
     [it-role-compass.ui :as ui]
     [it-role-compass.data :as data]
-    [it-role-compass.ml.evaluation :as eval])
+    [it-role-compass.ml.model :as model]
+    [it-role-compass.ml.inference :as inference]
+    [it-role-compass.ml.ui :as ml-ui])
   (:gen-class))
 
 (defn it-job-position-summary
@@ -38,7 +40,7 @@
         ml-ratings                 (utils/ordered-values ml-qual-ratings-unordered data/ML-FEATURE-ORDER)]
     (println (ui/it-job-position-summary->string es-summary))
     (println (ui/it-job-position-recommendations->string es-recommendations))
-    (eval/print-report! (eval/predict! ml-ratings))))
+    (ml-ui/print-report! (inference/predict! ml-ratings))))
 
 (defn -main
   [& args]

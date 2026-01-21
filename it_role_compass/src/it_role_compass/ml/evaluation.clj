@@ -1,24 +1,10 @@
 (ns it-role-compass.ml.evaluation
   (:require
-    [tech.v3.dataset :as ds]
-    
-    [it-role-compass.ml.model :as model]
-    [it-role-compass.ml.config :as config]))
+    [tech.v3.dataset :as ds]))
 
-(defn predict! 
-  [user-skills]
-  (let [{:keys [feature-columns roles test pipe fit-context accuracy]} (model/init-model!)
-        ;; "(first roles)" is the dummy target value; it won't be used in prediction.
-        new-person (ds/->dataset [(assoc (zipmap feature-columns user-skills)
-                                         config/TARGET-COLUMN
-                                         (first roles))])
-        {:keys [it-job-position-predictions]} (model/predict-probabilities test new-person pipe fit-context roles)]
-    {:it-job-position-predictions it-job-position-predictions
-     :accuracy                    accuracy}))
-
-(defn print-report!
-  [{:keys [accuracy it-job-position-predictions]}]
-  (println (format "Model accuracy: %.2f%%" (* 100 (double accuracy))))
-  (println "All job probabilities:")
-  (doseq [[it-job-position probability] it-job-position-predictions]
-    (println (format "%5.2f%% %s" (* 100 (double probability)) it-job-position))))
+(defn calculate-accuracy 
+  [test-dataset prediction-dataset target-column]
+  (let [y-true (ds/column test-dataset target-column)
+        y-pred (take (count y-true) (ds/column prediction-dataset target-column))]
+    (/ (count (filter true? (map = y-true y-pred)))
+       (count y-true))))

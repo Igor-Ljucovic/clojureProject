@@ -4,28 +4,13 @@
     [it-role-compass.utils :as utils]
     [it-role-compass.ml.config :as config]
     [it-role-compass.ml.pipeline :as pipe]
+    [it-role-compass.ml.evaluation :as evaluation]
     [scicloj.metamorph.core :as mm]))
 
 (defonce ^:private model-state (atom nil))
 
 (defn require-smile! []
   (utils/silently (require 'scicloj.ml.smile.classification)))
-
-(defn calculate-accuracy 
-  [test-dataset prediction-dataset target-column]
-  (let [y-true (ds/column test-dataset target-column)
-        y-pred (take (count y-true) (ds/column prediction-dataset target-column))]
-    (/ (count (filter true? (map = y-true y-pred)))
-       (count y-true))))
-
-(defn predict-probabilities 
-  [test-dataset new-person model-pipe fit-ctx roles]
-  (let [prediction-dataset (pipe/transform-data (ds/concat test-dataset new-person) model-pipe fit-ctx)
-        row                (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
-        probabilities      (->> roles
-                             (map (fn [r] [r (double (get row r 0.0))]))
-                             (sort-by second >))]
-    {:it-job-position-predictions probabilities}))
 
 (defn train-once! 
   []
@@ -43,7 +28,7 @@
         pre-pipe           (pipe/build-preproc-pipe feature-columns config/TARGET-COLUMN)
         test-ready         (pipe/transform-data test pre-pipe fit-context)
         prediction-dataset (pipe/transform-data test model-pipe fit-context)
-        accuracy           (calculate-accuracy test-ready prediction-dataset config/TARGET-COLUMN)]
+        accuracy           (evaluation/calculate-accuracy test-ready prediction-dataset config/TARGET-COLUMN)]
     {:feature-columns feature-columns
      :roles           roles
      :test            test
