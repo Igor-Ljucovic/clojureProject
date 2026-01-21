@@ -1,11 +1,12 @@
 (ns it-role-compass.ml.model
   (:require
     [tech.v3.dataset :as ds]
+    [scicloj.metamorph.core :as mm]
+    
     [it-role-compass.utils :as utils]
     [it-role-compass.ml.config :as config]
     [it-role-compass.ml.pipeline :as pipe]
-    [it-role-compass.ml.evaluation :as evaluation]
-    [scicloj.metamorph.core :as mm]))
+    [it-role-compass.ml.evaluation :as evaluation]))
 
 (defonce ^:private model-state (atom nil))
 

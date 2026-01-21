@@ -3,7 +3,7 @@
     [it-role-compass.data :as data]
     [it-role-compass.data-transformations :as data-transformations]))
 
-(defn balance-weights 
+(defn- balance-weights 
   [ratings weights]
   (let [num (reduce-kv (fn [acc key value] (+ acc (* value (get ratings key)))) 0 weights)
         den (reduce + (vals weights))]

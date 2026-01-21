@@ -1,12 +1,13 @@
 (ns it-role-compass.ml.inference
   (:require
     [tech.v3.dataset :as ds]
+    
     [it-role-compass.utils :as utils]
     [it-role-compass.ml.config :as config]
     [it-role-compass.ml.pipeline :as pipe]
     [it-role-compass.ml.model :as model]))
 
-(defn require-smile! []
+(defn- require-smile! []
   (utils/silently (require 'scicloj.ml.smile.classification)))
 
 (defn predict-probabilities 

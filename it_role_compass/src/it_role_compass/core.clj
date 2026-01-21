@@ -10,7 +10,7 @@
     [it-role-compass.ml.ui :as ml-ui])
   (:gen-class))
 
-(defn it-job-position-summary
+(defn- it-job-position-summary
   [user-ratings]
   (let [average     (dt/average (vals user-ratings))
         suitability (ui/it-job-position-suitability->string average)
@@ -21,7 +21,7 @@
      :strengths   strengths
      :weaknesses  weaknesses}))
 
-(defn it-job-position-recommendations
+(defn- it-job-position-recommendations
   [user-ratings]
   (-> (es/recommended-it-job-position-weights user-ratings)
       (dt/power-kv 4)
@@ -29,7 +29,7 @@
       (dt/sort-desc-kv)
       (dt/format-it-job-position-recommendations)))
 
-(defn run-app
+(defn- run-app
   []
   (println (ui/app-intro->string))
   (let [user-ratings               (ui/ask-all-ratings! data/questions)
@@ -42,6 +42,6 @@
     (println (ui/it-job-position-recommendations->string es-recommendations))
     (ml-ui/print-report! (inference/predict! ml-ratings))))
 
-(defn -main
+(defn- -main
   [& args]
   (run-app))

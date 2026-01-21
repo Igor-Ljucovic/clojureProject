@@ -10,13 +10,13 @@
     (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
     :else          "You probably shouldn't work in the IT sector."))
 
-(defn parse-rating
+(defn- parse-rating
   [s]
   (let [v (parse-double s)]
     (when (and v (<= 0.0 v 10.0))
       (double v))))
 
-(defn ask-for-it-skills-rating
+(defn- ask-for-it-skills-rating
   [question read-fn write-fn]
   (loop []
     (write-fn question)
@@ -39,7 +39,7 @@
     "Rate each topic from 0 to 10 (decimals allowed) based on how interested you are in it
             and how good you think you are at it."))
 
-(defn ask-all-ratings
+(defn- ask-all-ratings
   [ask-fn questions]
   (into {}
         (map (fn [{:keys [id q]}]
