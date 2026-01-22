@@ -1,6 +1,8 @@
 (ns it-role-compass.bench
   (:require [criterium.core :as c]
-            [it-role-compass.expert-system :as es]))
+            [it-role-compass.expert-system :as es]
+            [it-role-compass.ml.ui :as ml-ui]
+            [it-role-compass.ml.inference :as inference]))
 
 (def ratings
   {:data           8.5
@@ -29,7 +31,28 @@
    :monotony       3.5
    :money          4.0})
 
+(def ml-ratings
+  ["Not interested"
+   "Average"
+   "Intermediate"
+   "Not interested"
+   "Not interested"
+   "Not interested"
+   "Intermediate"
+   "Not interested"
+   "Not interested"
+   "Excellent"
+   "Excellent"
+   "Beginner"
+   "Not interested"
+   "Average"])
+
 (defn bench-expert-system 
   []
   (c/quick-bench
     (es/it-job-position-expert-system-recommendations ratings)))
+
+(defn bench-machine-learning
+  []
+  (c/quick-bench
+    (ml-ui/machine-learning-report->string (inference/predict! ml-ratings))))
