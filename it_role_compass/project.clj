@@ -1,6 +1,6 @@
-(defproject it_role_compass "2.0.0-Alpha"
-  :description "CLI expert system that recommends IT job positions based on user's interests/skills"
-  :url "https://donthaveoneyet.com"
+(defproject it_role_compass "2.1.0"
+  :description "CLI expert system and ml algorithm that recommends IT job positions based on user's interests/skills"
+  :url "https://donthaveonecozitsaconsoleapp.com"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
 
