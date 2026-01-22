@@ -28,9 +28,21 @@
 
 (defn app-intro->string
   []
-  (str
-    "Rate each topic from 0 to 10 (decimals allowed) based on how interested you are in it
-            and how good you think you are at it."))
+  (str/join
+    "\n"
+    ["Tired of all of the slop websites and apps that give you very generic job recommendations such as 'Programmer'?"
+     ""
+     "Well, IT Role Compass is here to help you find a more specific IT job position that best suits your unique skill set!"
+     "(if you are even meant to be working in IT that is)"
+     ""
+     "Our app offers predictions by an expert in this field, as well as a machine learning model trained on real world data."
+     ""
+     "However, the data used wasn't meant for this purpose, and some IT job positions may be missing from the recommendations, so it is advised to focus on the results from the expert system instead."
+     ""
+     "You will be asked to rate your interest and proficiency in various skills from 0-10 (i.e. 7, 5.5, 10, 0)."
+     ""
+     "Let's get started!"
+     ""]))
 
 (defn- ask-all-ratings
   [ask-fn questions]
