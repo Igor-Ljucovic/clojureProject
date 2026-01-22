@@ -1,7 +1,6 @@
 (ns it-role-compass.ui
   (:require
     [clojure.string :as str]
-    [it-role-compass.data :as data]
     [it-role-compass.summary :as summary]))
 
 (defn- parse-rating

@@ -18,7 +18,8 @@
 
   :profiles
   {:dev
-   {:dependencies [[midje/midje "1.10.10"]
+   {:source-paths ["dev"]
+    :dependencies [[midje/midje "1.10.10"]
                    [criterium "0.4.6"]]
     :plugins      [[lein-midje "3.2.1"]]}
 

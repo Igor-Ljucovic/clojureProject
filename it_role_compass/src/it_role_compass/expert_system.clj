@@ -4,22 +4,22 @@
     [it-role-compass.data-transformations :as dt]))
 
 (defn- balance-weights 
-  [ratings weights]
-  (let [num (reduce-kv (fn [acc key value] (+ acc (* value (get ratings key)))) 0 weights)
+  [user-ratings weights]
+  (let [num (reduce-kv (fn [acc key value] (+ acc (* value (get user-ratings key)))) 0 weights)
         den (reduce + (vals weights))]
     (double (/ num den))))
 
 (defn recommended-it-job-position-weights
-  [ratings]
+  [user-ratings]
   (into {}
         (map (fn [{:keys [label weights]}]
-               [label (balance-weights ratings weights)])
+               [label (balance-weights user-ratings weights)])
                 data/job-weight-sets)))
 
 (defn expert-system->ml-ratings-data-refactor
-  [ratings]
+  [user-ratings]
   (update-vals data/expert-system->ml-mapping 
-    #(dt/average (keep ratings %))))
+    #(dt/average (keep user-ratings %))))
 
 (defn it-job-position-expert-system-recommendations
   [user-ratings]
@@ -28,3 +28,4 @@
       (dt/normalize-to-percent-kv)
       (dt/sort-desc-kv)
       (dt/format-it-job-position-recommendations)))
+      
