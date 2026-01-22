@@ -1,14 +1,8 @@
 (ns it-role-compass.ui
   (:require
-    [clojure.string :as str]))
-
-(defn it-job-position-suitability->string
-  [average]
-  (cond
-    (>= average 8) "You are very likely to enjoy working in IT."
-    (>= average 6) "You probably could work in the IT sector."
-    (>= average 4) "The IT field might be okay for you, but consider it as one of several options."
-    :else          "You probably shouldn't work in the IT sector."))
+    [clojure.string :as str]
+    [it-role-compass.data :as data]
+    [it-role-compass.summary :as summary]))
 
 (defn- parse-rating
   [s]
@@ -50,15 +44,16 @@
   [questions]
   (ask-all-ratings ask-for-it-skills-ratings questions))
 
-(defn it-job-position-summary->string
-  [{:keys [average suitability strengths weaknesses]}]
+(defn general-summary->string
+  [user-ratings]
+  (let [{:keys [average suitability strengths weaknesses]} (summary/general-summary user-ratings)]
   (str
     (format "Average it job skill: %.2f\n" (double average))
     suitability "\n"
     "Strong skills: " (str/join ", " strengths) "\n"
-    "Weak skills: "   (str/join ", " weaknesses)))
+    "Weak skills: "   (str/join ", " weaknesses))))
 
-(defn it-job-position-recommendations->string
+(defn it-job-position-predictions->string
   [lines]
   (str
     "Recommended IT job positions:\n"

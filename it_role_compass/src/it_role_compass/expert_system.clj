@@ -1,7 +1,7 @@
 (ns it-role-compass.expert-system
   (:require
     [it-role-compass.data :as data]
-    [it-role-compass.data-transformations :as data-transformations]))
+    [it-role-compass.data-transformations :as dt]))
 
 (defn- balance-weights 
   [ratings weights]
@@ -19,4 +19,12 @@
 (defn expert-system->ml-ratings-data-refactor
   [ratings]
   (update-vals data/expert-system->ml-mapping 
-    #(data-transformations/average (keep ratings %))))
+    #(dt/average (keep ratings %))))
+
+(defn it-job-position-expert-system-recommendations
+  [user-ratings]
+  (-> (recommended-it-job-position-weights user-ratings)
+      (dt/power-kv 4)
+      (dt/normalize-to-percent-kv)
+      (dt/sort-desc-kv)
+      (dt/format-it-job-position-recommendations)))
