@@ -12,21 +12,27 @@
   (utils/silently (require 'scicloj.ml.smile.classification)))
 
 (defn rank-predicted-probabilities 
-  [test-dataset new-person model-pipe fit-context roles]
-  (let [prediction-dataset (pipe/run-pipeline (ds/concat test-dataset new-person) model-pipe fit-context)
-        row                (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
-        probabilities      (->> roles
-                             (map (fn [r] [r (double (get row r 0.0))]))
+  [reference-dataset sample-dataset model-pipeline fit-context labels]
+  (let [prediction-dataset (pipe/run-pipeline (ds/concat reference-dataset sample-dataset) model-pipeline fit-context)
+        new-row            (ds/row-at prediction-dataset (dec (ds/row-count prediction-dataset)))
+        probabilities      (->> labels
+                             (map (fn [label] [label (double (get new-row label 0.0))]))
                              (sort-by second >))]
     {:it-job-position-predictions probabilities}))
 
-(defn predict! 
-  [user-skills]
-  (let [{:keys [feature-columns roles test pipe fit-context accuracy]} (model/init-model!)
-        ;; "(first roles)" is the dummy target value; it won't be used in prediction.
-        new-person (ds/->dataset [(assoc (zipmap feature-columns user-skills)
-                                         config/TARGET-COLUMN
-                                         (first roles))])
-        {:keys [it-job-position-predictions]} (rank-predicted-probabilities test new-person pipe fit-context roles)]
+(defn predict!
+  [new-sample]
+  (let [{:keys [feature-columns labels reference-dataset model-pipeline fit-context accuracy]}
+        (model/init-model!)
+        ;; "(first labels)" is the dummy target value; it won't be used in prediction.
+        sample-dataset (ds/->dataset [(assoc (zipmap feature-columns new-sample)
+                       config/TARGET-COLUMN
+                       (first labels))])
+        {:keys [it-job-position-predictions]}
+        (rank-predicted-probabilities reference-dataset
+                                      sample-dataset
+                                      model-pipeline
+                                      fit-context
+                                      labels)]
     {:it-job-position-predictions it-job-position-predictions
      :accuracy                    accuracy}))
