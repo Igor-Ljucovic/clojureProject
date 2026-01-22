@@ -14,7 +14,7 @@
   (into {}
         (map (fn [{:keys [label weights]}]
                [label (balance-weights user-ratings weights)])
-                data/job-weight-sets)))
+                data/expert-system-job-weight-sets)))
 
 (defn expert-system->ml-ratings-data-refactor
   [user-ratings]

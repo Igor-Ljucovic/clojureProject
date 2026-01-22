@@ -27,26 +27,7 @@
    {:id :monotony       :q "Would you mind solving the same problems the majority of the time? (0-10)"}
    {:id :money          :q "How much do you care about how much money you'll make? (0-10)"}])
 
-(def ML-LABELS
-  ["Not Interested" "Poor" "Beginner" "Average" "Intermediate" "Advanced"])
-
-(def ML-FEATURE-ORDER
-  ["Databases"
-   "Hardware"
-   "Security"
-   "Networking"
-   "Software development"
-   "Programming skills"
-   "Project management"
-   "Core Technical"
-   "Communication"
-   "AI ML"
-   "Software engineering"
-   "Business analysis and data science"
-   "Communication skills"
-   "IT graphics designing"])
-
-(def job-weight-sets
+(def expert-system-job-weight-sets
   [{:label "Data analytics, data science, ML, AI"
     :weights {:data 8 :statistics 7 :math 6}}
    {:label "Backend development, databases"
