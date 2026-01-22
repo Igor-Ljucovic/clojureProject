@@ -29,7 +29,7 @@
         pre-pipe           (pipe/build-encoding-pipeline feature-columns config/TARGET-COLUMN)
         test-ready         (pipe/run-pipeline test pre-pipe fit-context)
         prediction-dataset (pipe/run-pipeline test model-pipe fit-context)
-        accuracy           (evaluation/calculate-accuracy test-ready prediction-dataset config/TARGET-COLUMN)]
+        accuracy           (evaluation/accuracy test-ready prediction-dataset config/TARGET-COLUMN)]
     {:feature-columns feature-columns
      :roles           roles
      :test            test
