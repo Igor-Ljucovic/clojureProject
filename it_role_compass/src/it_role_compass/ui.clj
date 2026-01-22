@@ -67,5 +67,5 @@
 (defn it-job-position-predictions->string
   [lines]
   (str
-    "Recommended IT job positions:\n"
+    "All IT job position prediction probabilities from out expert system:\n"
     (str/join "\n" lines)))
