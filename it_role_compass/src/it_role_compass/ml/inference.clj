@@ -23,7 +23,7 @@
 (defn predict!
   [new-sample]
   (let [{:keys [feature-columns labels reference-dataset model-pipeline fit-context accuracy]}
-        (model/init-model!)
+        (model/initialize-model! config/RANDOM-FOREST-MODEL)
         ;; "(first labels)" is the dummy target value; it won't be used in prediction.
         sample-dataset (ds/->dataset [(assoc (zipmap feature-columns new-sample)
                        config/TARGET-COLUMN

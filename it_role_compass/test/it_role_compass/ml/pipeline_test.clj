@@ -11,7 +11,7 @@
                                     {:skill-a "Intermediate"   :skill-b "Average"        :job-role "IT Support"}])]
 
     (sut/load-dataset path target) => (contains {:feature-columns [:skill-a :skill-b]
-                                                 :roles           ["IT Support" "Web Developer"]
+                                                 :labels          ["IT Support" "Web Developer"]
                                                  :dataset         mock-dataset})
     (provided
       (ds/->dataset path {:key-fn keyword}) => mock-dataset)))

@@ -3,6 +3,7 @@
             [it-role-compass.ml.inference :as sut]
             [it-role-compass.ml.pipeline :as pipe]
             [it-role-compass.ml.model :as model]
+            [it-role-compass.ml.config :as config]
             [tech.v3.dataset :as ds]))
 
 (fact "rank-predicted-probabilities"
@@ -45,7 +46,7 @@
                                   :accuracy                    0.77}
 
     (provided
-      (model/init-model!) => mock-model-data
+      (model/initialize-model! config/RANDOM-FOREST-MODEL) => mock-model-data
       
       (sut/rank-predicted-probabilities :mock-test-dataset 
                                         anything 

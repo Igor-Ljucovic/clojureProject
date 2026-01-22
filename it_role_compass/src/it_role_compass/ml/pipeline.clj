@@ -12,7 +12,7 @@
   (let [dataset (ds/->dataset file-path {:key-fn keyword})]
     {:dataset         dataset
      :feature-columns (remove #(= % target-column) (ds/column-names dataset))
-     :roles           (->> (ds/column dataset target-column) distinct sort vec)}))
+     :labels          (->> (ds/column dataset target-column) distinct sort vec)}))
 
 (defn build-encoding-pipeline
   [feature-columns target-column]

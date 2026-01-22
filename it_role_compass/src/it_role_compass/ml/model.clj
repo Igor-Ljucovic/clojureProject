@@ -38,7 +38,7 @@
      :fit-context       fit-context
      :accuracy          accuracy}))
 
-(defn init-model!
+(defn initialize-model!
   [ml-model]
   (or (get @model-state ml-model)
       (let [trained (train-once! ml-model)]
