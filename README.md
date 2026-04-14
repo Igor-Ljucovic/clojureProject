@@ -1,23 +1,37 @@
-## Ideas for future development of the app:
+# IT Role Compass
 
-1 (done) - add more output parameters (game dev, IT support, mobile dev, etc.)  
+A CLI application that helps users determine which IT job positions best fit them based on their interests, skills, and personal preferences using an expert system and a machine learning algorithm.
 
-2 (done) - add validation  
+---
 
-3 - add more input parameters other then just asking the users how interesting they find certain topics (mandatory parameters for if they enjoy stale or dynamic working environment, how much social interaction they would prefer at the job, optional parameters for MBTI/BIG5, "collecting candidate features", maybe some more non-numeric input parameters too) (probably unnecessary complexity)
+## Features & Architecture
 
-4 - add 2 options at the beginning so that the user can:  
-    a - ask for the expert system prediction
-    b - ask for the machine learning algorithm prediction
+- Predicts suitable IT career paths based on user-provided questionnaire responses
+- Supports both expert system-based and machine learning-based prediction models
+- Outputs ranked predictions with percentage-based confidence scores
+- Automatic translation of user input between expert system and machine learning data formats
+- Automated testing for nearly all non-trivial functions using Midje
+- Performance testing using Criterium
 
-5 - (done) add non-manual validation (for employed users' data)  
+---
 
-6 - (done) instead of just having certain string, also add percentages to these predictions (56% DevOps, 29% web dev, etc.)  
+## Use Case
 
-7 - maybe make the entire output into 1 file or into 1 nice picture with descriptive statistics, maybe by using some API (probably unnecessary)
+Many career recommendation tools only suggest broad industries such as "IT" or "Healthcare".
+IT Role Compass helps users narrow that down further by recommending specific IT job roles, assisting users who are unsure which specialization within the IT industry suits them best.
 
-8 - maybe use an OpenAI API or something like that for formatting that output based on the percentages for job positions (probably unnecessary)  
+---
 
-9 - maybe add an actual graphical interface (probably unnecessary)
+## Tech Stack
 
-10 - (done) maybe add some automated testing or some type of automation if possible
+- **Programming Language:** Clojure
+- **Frameworks & Libraries:** Midje, Criterium, Scicloj, Metamorph, Smile
+
+---
+
+## Additional Notes
+
+The machine learning model was trained on a transformed real-world IT employee dataset that was cleaned, merged, and refined to improve prediction quality.  
+The expert system weights were manually designed to simulate expert decision-making logic.
+
+This project focuses heavily on software architecture, prediction logic, code quality, and maintainability rather than UI/visual design.
